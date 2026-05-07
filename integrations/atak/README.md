@@ -269,6 +269,10 @@ echo "<new_hash>" > /root/.cot_peer
 | File transfers | Not supported | Too large for Reticulum MTU |
 | Video streaming | Not supported | Bandwidth limitations |
 
+## See Also
+
+- **[ADS-B to CoT](adsb-to-cot.md)** — Display aircraft in TAK using an RTL-SDR receiver and ADSBCOT
+
 ## Security
 
 | Layer | Protection |

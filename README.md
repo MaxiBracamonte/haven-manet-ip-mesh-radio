@@ -12,8 +12,10 @@ Haven is a mesh networking platform that combines:
 - **HaLow radios** (802.11ah) operating in sub-1GHz spectrum for multi-kilometer range
 - **BATMAN-adv** for automatic Layer 2 mesh routing
 - **OpenMANET** firmware (OpenWrt-based) for reliable embedded networking
+- **USB sidecar support** for LoRa radios, RTL-SDR, and other peripherals
 - **Optional Reticulum** for encrypted overlay communications
 - **Optional ATAK/CivTAK** integration for situational awareness
+- **Optional ADS-B to CoT** for aircraft tracking in TAK
 
 ### Why Haven?
 
@@ -26,6 +28,31 @@ Haven is a mesh networking platform that combines:
 | **Fully Open Source** | No proprietary lock-in, audit everything |
 | **Multi-hop** | Traffic routes through intermediate nodes |
 | **Low Power** | Sub-1GHz radios are power efficient |
+| **Expandable** | USB peripherals: LoRa sidecars, SDR, cellular |
+
+## Hardware
+
+Haven runs on two platforms. Both use the same mesh protocol and interoperate fully.
+
+### Haven 2 (Raspberry Pi 5)
+
+The current recommended platform. USB-attached HaLow radio with a flexible USB peripheral bus for LoRa sidecars, RTL-SDR, additional WiFi adapters, and more.
+
+- **SBC**: Raspberry Pi 5 (4GB or 8GB)
+- **HaLow Radio**: Morse Micro MM8108 (USB)
+- **2.4GHz WiFi**: RT5370 USB adapter (Panda Wireless or similar)
+- **USB Hub**: Recommended for additional peripherals
+- **Platform details**: [Pi 5 notes](docs/reference/pi5-notes.md)
+
+### Haven 1 (Raspberry Pi 4 / CM4)
+
+The original platform — still fully supported. Haven 1 nodes mesh seamlessly with Haven 2 nodes.
+
+- **SBC**: Raspberry Pi 4 Model B or Compute Module 4
+- **HaLow Radio**: Morse Micro MM601X (SPI HAT)
+- **5GHz WiFi**: Cypress CYW43455 (onboard)
+- **2.4GHz WiFi**: RT5370 USB adapter (optional)
+- **Platform details**: [Pi 4 notes](docs/reference/pi4-notes.md)
 
 ## Haven Nodes
 
@@ -40,7 +67,7 @@ Haven nodes are compact, rugged units built for field deployment. Each node incl
 
 ## Enclosures
 
-The official [Haven case for Raspberry Pi–based MANET](https://www.printables.com/model/1468595-haven-case-for-raspberry-pi-based-manet-by-paralle) on [Printables](https://www.printables.com/) is **100% free** — **public domain**: no cost to download, and you may print, modify, and share without restriction. Enclosure design: [MOROSX](https://morosx.com/).
+The official [Haven case for Raspberry Pi-based MANET](https://www.printables.com/model/1468595-haven-case-for-raspberry-pi-based-manet-by-paralle) on [Printables](https://www.printables.com/) is **100% free** — **public domain**: no cost to download, and you may print, modify, and share without restriction. Enclosure design: [MOROSX](https://morosx.com/).
 
 - **[Download the Haven case (Printables)](https://www.printables.com/model/1468595-haven-case-for-raspberry-pi-based-manet-by-paralle)** — STLs and part notes are on that page
 - The [Haven Guide](https://buildwithparallel.com/products/haven) also places the case in the full build (radios, power, mounting, etc.)
@@ -49,41 +76,25 @@ The official [Haven case for Raspberry Pi–based MANET](https://www.printables.
 
 ```mermaid
 flowchart TB
-  Internet((Internet / WAN)) -->|uplink| G["Haven GATE (green) — eth0, HaLow mesh, WiFi APs, br-ahwlan, DHCP (openmanetd)"]
-  G ---|"802.11ah sub-1 GHz (typ. 1–10+ km node-to-node)"| P["Haven POINT (blue) — HaLow mesh, WiFi APs, br-ahwlan 10.41.x.x/16"]
+  Internet((Internet / WAN)) -->|uplink| G["Haven GATE — eth0, HaLow mesh, WiFi APs, br-ahwlan, DHCP"]
+  G ---|"802.11ah sub-1 GHz (typ. 1-10+ km)"| P["Haven POINT — HaLow mesh, WiFi APs, br-ahwlan 10.41.x.x/16"]
   P --> C((Phones, laptops, ATAK))
+  P -.-|"USB sidecar (optional)"| L((LoRa / Reticulum))
+  G -.-|"RTL-SDR (optional)"| A((ADS-B aircraft tracking))
 ```
-
-## Documentation
-
-| Document | What it covers |
-|----------|----------------|
-| **[Docs home (sitemap)](docs/README.md)** | Where everything lives: getting started, reference, runbooks, advanced |
-| **[Enclosures](#enclosures)** (this page) | 100% free public-domain **3D case** for Pi-based nodes ([Printables](https://www.printables.com/model/1468595-haven-case-for-raspberry-pi-based-manet-by-paralle)) |
-| **[Setup Guide](docs/getting-started/setup-guide.md)** | Step-by-step: gate setup, point nodes, Reticulum, ATAK, Heltec nodes |
-| **[Finding & Accessing Nodes](docs/reference/finding-nodes.md)** | How to find node IPs and reach LuCI — the thing you'll need most often |
-| **[Troubleshooting](docs/runbooks/troubleshooting.md)** | Mental model, diagnostics, fix checklists for every common failure |
-| **[HaLow Reference](docs/reference/halow-reference.md)** | Radio specs, channel widths, MCS tables, software versions |
-| **[Range Optimization](docs/advanced/range-optimization.md)** | Antenna selection, TX power, channel width tuning, range testing |
-| **[Antenna Smart Routing](docs/advanced/antenna-smart-routing.md)** | Automatic antenna switching with RF SPDT switch |
-| **[Gate Node Config](docs/reference/haven-gate.md)** | Manual gate configuration reference |
-| **[Point Node Config](docs/reference/haven-point.md)** | Manual point configuration reference |
-| **[Reticulum](integrations/reticulum/README.md)** | **Usually:** client apps (Sideband, MeshChat) on Haven WiFi; on-node RNS only for bridge/demos |
-| **[ATAK Bridge](integrations/atak/README.md)** | ATAK/CivTAK situational awareness over Reticulum |
-| **[Scripts](scripts/README.md)** | Script reference and Reticulum demo tools |
-| **[AI Agents](AGENTS.md)** | Context for AI agents (Claude, Cursor, etc.) to diagnose and fix your mesh |
 
 ## Quick Start
 
-All Haven setup scripts assume each node is flashed with a fresh/recent version of [OpenMANET](https://openmanet.org/). Flash the image onto a microSD card using Raspberry Pi Imager, insert it into the node, and power on. If the card still looks like it has old data after flashing, use Raspberry Pi Imager’s **Erase** (or SD **format/erase** utility) on the card first, then write the image. On **Raspberry Pi 4**, writing **Raspberry Pi OS (vanilla)** to the card once, then **OpenMANET on top**, can unstick a stubborn card; see the [setup guide](docs/getting-started/setup-guide.md) (same section as Erase / SD tips).
+All Haven setup scripts assume each node is flashed with a fresh/recent version of [OpenMANET](https://openmanet.org/). Flash the image onto a microSD card using Raspberry Pi Imager, insert it into the node, and power on. If the card still looks like it has old data after flashing, use Raspberry Pi Imager's **Erase** (or SD **format/erase** utility) on the card first, then write the image.
 
 | Step | What | How |
 |------|------|-----|
 | **1** | Set up the Gate node | Plug into router, run setup script → [Setup Guide](docs/getting-started/setup-guide.md#step-1-set-up-the-gate-node-green) |
 | **2** | Add Point nodes | Plug into laptop, paste setup script → [Setup Guide](docs/getting-started/setup-guide.md#step-2-add-point-nodes-blue) |
-| **3** | Reticulum *(optional)* | **Usually:** apps on your phone/laptop (Sideband, MeshChat) on Haven WiFi — *no* RNS on the node. **Advanced:** on-node RNS for bridge/demos only → [Setup Guide](docs/getting-started/setup-guide.md#step-3-install-reticulum-optional) |
-| **4** | Demo `rns_*` scripts on nodes *(optional)* | **Only** if you installed on-node RNS in step 3 — [Scripts](scripts/README.md#reticulum-demo-scripts) (otherwise use your Reticulum app) |
-| **5** | Install the ATAK bridge *(optional)* | Situational awareness → [Setup Guide](docs/getting-started/setup-guide.md#step-5-install-the-atak-bridge-optional) |
+| **3** | Reticulum *(optional)* | Apps on your phone/laptop (Sideband, MeshChat) on Haven WiFi → [Reticulum](integrations/reticulum/README.md) |
+| **4** | ATAK Bridge *(optional)* | Situational awareness → [ATAK](integrations/atak/README.md) |
+| **5** | ADS-B to CoT *(optional)* | Aircraft tracking in TAK via RTL-SDR → [ADS-B](integrations/atak/adsb-to-cot.md) |
+| **6** | LoRa sidecar *(optional)* | USB LoRa MCU for Reticulum → [Tested devices](docs/reference/tested-usb-devices.md) |
 
 > After any step, use LuCI's web interface to change passwords, WiFi SSIDs, and other settings. See **[Finding & Accessing Nodes](docs/reference/finding-nodes.md)** to reach each node.
 
@@ -101,18 +112,25 @@ All Haven setup scripts assume each node is flashed with a fresh/recent version 
 
 </details>
 
-## Hardware Requirements
+## Documentation
 
-### Tested Platform
-- **SBC**: Raspberry Pi CM4 / Pi 4
-- **HaLow Radio**: Morse Micro MM601X (SPI interface)
-- **5GHz WiFi**: Cypress CYW43455 (onboard on Pi)
-- **2.4GHz WiFi**: RT5370 USB adapter (optional)
-
-### Minimum Requirements
-- ARM or x86 device with SPI interface
-- HaLow radio module (Morse Micro recommended)
-- Standard WiFi for client access
+| Document | What it covers |
+|----------|----------------|
+| **[Docs home (sitemap)](docs/README.md)** | Where everything lives: getting started, reference, runbooks, advanced |
+| **[Setup Guide](docs/getting-started/setup-guide.md)** | Step-by-step: gate setup, point nodes, Reticulum, ATAK |
+| **[Finding & Accessing Nodes](docs/reference/finding-nodes.md)** | How to find node IPs and reach LuCI |
+| **[Pi 5 Notes](docs/reference/pi5-notes.md)** | Haven 2 platform specifics, known issues, fixes |
+| **[Pi 4 Notes](docs/reference/pi4-notes.md)** | Haven 1 platform specifics |
+| **[Tested USB Devices](docs/reference/tested-usb-devices.md)** | LoRa boards, WiFi adapters, SDR — tested and working |
+| **[OpenWrt Build Packages](docs/reference/openwrt-build-packages.md)** | Recommended packages for custom firmware builds |
+| **[HaLow Reference](docs/reference/halow-reference.md)** | Radio specs, channel widths, MCS tables, software versions |
+| **[Troubleshooting](docs/runbooks/troubleshooting.md)** | Mental model, diagnostics, fix checklists |
+| **[Range Optimization](docs/advanced/range-optimization.md)** | Antenna selection, TX power, channel width tuning |
+| **[Reticulum](integrations/reticulum/README.md)** | Encrypted overlay communications |
+| **[ATAK Bridge](integrations/atak/README.md)** | ATAK/CivTAK situational awareness over Reticulum |
+| **[ADS-B to CoT](integrations/atak/adsb-to-cot.md)** | Aircraft tracking in TAK via RTL-SDR |
+| **[Scripts](scripts/README.md)** | Script reference and Reticulum demo tools |
+| **[AI Agents](AGENTS.md)** | Context for AI agents (Claude, Cursor, etc.) to diagnose and fix your mesh |
 
 ## Use Cases
 
