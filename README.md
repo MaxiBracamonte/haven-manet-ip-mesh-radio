@@ -34,25 +34,24 @@ Haven is a mesh networking platform that combines:
 
 Haven runs on two platforms. Both use the same mesh protocol and interoperate fully.
 
-### Haven 2 (Raspberry Pi 5)
+### Haven 1 (Raspberry Pi 4 / CM4) — Recommended
 
-The current recommended platform. USB-attached HaLow radio with a flexible USB peripheral bus for LoRa sidecars, RTL-SDR, additional WiFi adapters, and more.
+The current recommended platform. Proven stable in the field.
+
+- **SBC**: Raspberry Pi 4 Model B or Compute Module 4
+- **HaLow Radio**: Morse Micro MM601X (SPI HAT)
+- **2.4GHz WiFi**: RT5370 USB adapter (Panda Wireless or similar)
+- **Platform details**: [Pi 4 notes](docs/reference/pi4-notes.md)
+
+### Haven 2 (Raspberry Pi 5) — Experimental
+
+USB-attached HaLow radio with a flexible USB peripheral bus. Still being validated — not yet recommended for production deployments.
 
 - **SBC**: Raspberry Pi 5 (4GB or 8GB)
 - **HaLow Radio**: Morse Micro MM8108 (USB)
 - **2.4GHz WiFi**: RT5370 USB adapter (Panda Wireless or similar)
 - **USB Hub**: Recommended for additional peripherals
 - **Platform details**: [Pi 5 notes](docs/reference/pi5-notes.md)
-
-### Haven 1 (Raspberry Pi 4 / CM4)
-
-The original platform — still fully supported. Haven 1 nodes mesh seamlessly with Haven 2 nodes.
-
-- **SBC**: Raspberry Pi 4 Model B or Compute Module 4
-- **HaLow Radio**: Morse Micro MM601X (SPI HAT)
-- **5GHz WiFi**: Cypress CYW43455 (onboard)
-- **2.4GHz WiFi**: RT5370 USB adapter (optional)
-- **Platform details**: [Pi 4 notes](docs/reference/pi4-notes.md)
 
 ## Haven Nodes
 
