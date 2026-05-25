@@ -40,7 +40,7 @@ This is the node that shares internet with the rest of the mesh.
 ### What your gate can do now
 
 - **Gets internet** from any upstream router via Ethernet — home ISP, Starlink, hotel, whatever has a port
-- **Broadcasts `green` WiFi** (2.4GHz) — any phone, laptop, or tablet can connect and get internet just like a normal router
+- **Broadcasts `green` WiFi** (2.4GHz) — any phone, laptop, or tablet can connect and get internet just like a normal router. Clients get an IP in the `10.41.0.0/16` subnet (e.g. `10.41.0.100`) — this is the Haven mesh address space shared across all nodes and clients
 - **Scans for HaLow mesh nodes** — if a point node is in range, BATMAN-adv automatically bridges it into the network so its clients share the same internet and can talk to each other
 
 ### Gate Smoke Test
