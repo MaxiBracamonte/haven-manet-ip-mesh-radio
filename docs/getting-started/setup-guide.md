@@ -24,10 +24,9 @@ This is the node that shares internet with the rest of the mesh.
 4. **Run through the OpenMANET initial wizard** — this configures the basic mesh gate settings (hostname, mesh channel, password, etc.). You can **disable the 2.4GHz and 5GHz WiFi radios** in the wizard — the Haven setup script reconfigures them from scratch anyway
 5. **Plug the gate into your upstream router** via Ethernet
 6. **Find the gate's new IP** in your router's device/DHCP table
-7. **SSH into the gate** from your computer:
-   ```bash
-   ssh root@<gate-ip>
-   ```
+7. **Open a terminal on the gate** — pick one:
+   - **Browser:** go to `http://<gate-ip>` → **Services → Terminal**
+   - **SSH:** `ssh root@<gate-ip>` from your computer
 8. **Run the Haven setup script** (the node now has internet via the router):
    ```bash
    wget -O /tmp/setup.sh https://raw.githubusercontent.com/buildwithparallel/haven-manet-ip-mesh-radio/main/scripts/node-setup/setup-haven-gate.sh && sh /tmp/setup.sh
@@ -76,14 +75,22 @@ For each additional point node:
 
 ### Verify the Mesh
 
-1. Connect to **green-5ghz** WiFi (password: `green-5ghz`)
-2. Find the point node's mesh IP (run `uci get network.ahwlan.ipaddr` on the point node, or check its boot screen)
-3. Browse to **http://\<point-mesh-ip\>** — if blue's LuCI loads, your mesh is working
+1. Connect your phone or laptop to **`green`** WiFi (password: `greengreen`)
+2. Check your network settings — the gateway IP shown is the gate; open a terminal there via **`http://<gate-ip>` → Services → Terminal** or SSH
+3. Run on the gate to find blue's IP:
+   ```bash
+   ip neigh show dev br-ahwlan
+   ```
+4. Ping blue first, then browse to its LuCI:
+   ```bash
+   ping <blue-ip>
+   ```
+5. Open **`http://<blue-ip>`** — if blue's LuCI loads, your mesh is working
 
+For deeper diagnostics, run these on any node:
 ```bash
 iwinfo wlan0 info     # HaLow link quality
 batctl n              # BATMAN-adv neighbors
-ping <gate-mesh-ip>   # Ping gateway (find with: uci get network.ahwlan.ipaddr on the gate)
 ```
 
 <img src="../../assets/mesh-verify.png" alt="Mesh verification from point node" width="500">
@@ -99,9 +106,9 @@ ping <gate-mesh-ip>   # Ping gateway (find with: uci get network.ahwlan.ipaddr o
 
 After setup, connect your computer, phone, or tablet to the Haven network:
 
-1. **Join the node's WiFi** — `green-5ghz` for the gate; for a point, **`blue-2g`** from `setup-haven-point.sh` (2.4GHz USB only — the script does not set up the onboard 5GHz radio)
-   - Gate WiFi password: `green-5ghz`
-   - Point: default SSID/PSK `blue` / `blueblue` (change in `WIFI_2G4_*` in the point script, or in LuCI)
+1. **Join the node's WiFi** — `green` (2.4GHz) or `green-5ghz` for the gate; `blue` for a point (2.4GHz USB Panda only — onboard radios are disabled when Panda is present)
+   - Gate: `green` / `greengreen` or `green-5ghz` / `green-5ghz`
+   - Point: `blue` / `blueblue` (change in `WIFI_2G4_*` in the point script, or in LuCI)
 2. **Verify your device got an IP** — you should receive an address in the `10.41.x.x` range
    - **Mac/Linux:** `ifconfig` or `ip addr` — look for `10.41.x.x` on your WiFi interface
    - **Windows:** `ipconfig` — look for `10.41.x.x` under your Wi-Fi adapter

@@ -36,7 +36,9 @@ Caveats:
 
 1. **Connect your phone or laptop to `green` WiFi** (password: `greengreen`)
 2. **Find the gate's IP** — check your device's network settings; the gateway/router IP shown is the gate
-3. **Open a terminal on the gate** — browse to `http://<gate-ip>` → Services → Terminal, or SSH in
+3. **Open a terminal on the gate** — pick one:
+   - **Browser:** go to `http://<gate-ip>` → **Services → Terminal**
+   - **SSH:** `ssh root@<gate-ip>` from your computer
 4. **Find blue's IP** by running this on the gate:
    ```bash
    ip neigh show dev br-ahwlan
@@ -149,9 +151,11 @@ If the node isn't on the mesh yet (no gate, first-time setup, or misconfigured),
 
 Works for **any node on the mesh** — point (blue), Heltec, or any other `10.41.x.x` node. From your laptop, the gate is usually the only node reachable directly over your LAN; every other node lives on the HaLow mesh and is reached by hopping through the gate.
 
-1. SSH into the gate from your laptop: `ssh root@<gate-ip>`
-2. Find the target node's mesh IP — `strings /etc/openmanetd/openmanetd.db` for point nodes, `cat /tmp/dhcp.leases` for Heltec/other OpenWrt nodes.
-3. From the gate, SSH to the target node:
+1. **Open a terminal on the gate** — pick one:
+   - **Browser:** go to `http://<gate-ip>` → **Services → Terminal**
+   - **SSH:** `ssh root@<gate-ip>` from your computer
+2. Find the target node's mesh IP — `ip neigh show dev br-ahwlan` is the most reliable; or `strings /etc/openmanetd/openmanetd.db` for point nodes, `cat /tmp/dhcp.leases` for Heltec/other OpenWrt nodes.
+3. From the gate terminal, SSH to the target node:
 ```bash
 ssh root@<node-mesh-ip>          # e.g. havenblue / heltec.org / etc.
 ```
