@@ -104,10 +104,14 @@ if [ "$ENABLE_2G4_AP" = 1 ] && [ -n "$WIFI_2G4_SSID" ]; then
     if [ -n "$USB_2G_RADIO" ]; then
         WIFI2_RADIO="$USB_2G_RADIO"
         echo "  Detected Panda USB adapter: $WIFI2_RADIO"
-        if [ -n "$ONBOARD_2G_RADIO" ]; then
-            uci set wireless.$ONBOARD_2G_RADIO.disabled='1'
-            echo "  Disabled onboard 2.4GHz radio: $ONBOARD_2G_RADIO"
-        fi
+        for r in $(uci show wireless | grep "=wifi-device" | cut -d. -f2 | cut -d= -f1); do
+            path=$(uci get wireless.$r.path 2>/dev/null)
+            type=$(uci get wireless.$r.type 2>/dev/null)
+            [ "$type" = "morse" ] && continue
+            case "$path" in *usb*) continue ;; esac
+            uci set wireless.$r.disabled='1'
+            echo "  Disabled onboard radio: $r"
+        done
     elif [ -n "$ONBOARD_2G_RADIO" ]; then
         WIFI2_RADIO="$ONBOARD_2G_RADIO"
         echo "  No USB adapter found — using onboard radio: $WIFI2_RADIO"
