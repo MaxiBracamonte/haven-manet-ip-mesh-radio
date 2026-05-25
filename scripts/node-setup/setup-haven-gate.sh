@@ -143,27 +143,31 @@ if [ -n "$WIFI2_RADIO" ]; then
 fi
 
 echo "[4/7] Configuring 5GHz access point..."
-WIFI5_RADIO=$(uci show wireless | grep "\.band='5g'" | head -1 | cut -d. -f2)
-if [ -z "$WIFI5_RADIO" ]; then
-    echo "WARNING: No 5GHz radio found, skipping"
+if [ -n "$USB_2G_RADIO" ]; then
+    echo "  Panda USB adapter present — skipping onboard 5GHz (already disabled above)"
 else
-    echo "  Found 5GHz radio: $WIFI5_RADIO"
-    uci set wireless.$WIFI5_RADIO.disabled='0'
-    uci set wireless.$WIFI5_RADIO.channel="$WIFI_5GHZ_CHANNEL"
-    uci set wireless.$WIFI5_RADIO.htmode='VHT80'
+    WIFI5_RADIO=$(uci show wireless | grep "\.band='5g'" | head -1 | cut -d. -f2)
+    if [ -z "$WIFI5_RADIO" ]; then
+        echo "  WARNING: No 5GHz radio found, skipping"
+    else
+        echo "  Found 5GHz radio: $WIFI5_RADIO"
+        uci set wireless.$WIFI5_RADIO.disabled='0'
+        uci set wireless.$WIFI5_RADIO.channel="$WIFI_5GHZ_CHANNEL"
+        uci set wireless.$WIFI5_RADIO.htmode='VHT80'
 
-    WIFI5_IFACE=$(uci show wireless | grep "wireless\..*\.device='$WIFI5_RADIO'" | grep -v mesh | head -1 | cut -d. -f2)
-    if [ -z "$WIFI5_IFACE" ]; then
-        WIFI5_IFACE="ap_5ghz"
-        uci set wireless.$WIFI5_IFACE=wifi-iface
+        WIFI5_IFACE=$(uci show wireless | grep "wireless\..*\.device='$WIFI5_RADIO'" | grep -v mesh | head -1 | cut -d. -f2)
+        if [ -z "$WIFI5_IFACE" ]; then
+            WIFI5_IFACE="ap_5ghz"
+            uci set wireless.$WIFI5_IFACE=wifi-iface
+        fi
+
+        uci set wireless.$WIFI5_IFACE.device="$WIFI5_RADIO"
+        uci set wireless.$WIFI5_IFACE.mode='ap'
+        uci set wireless.$WIFI5_IFACE.ssid="$WIFI_5GHZ_SSID"
+        uci set wireless.$WIFI5_IFACE.encryption='psk2'
+        uci set wireless.$WIFI5_IFACE.key="$WIFI_5GHZ_KEY"
+        uci set wireless.$WIFI5_IFACE.network='ahwlan'
     fi
-
-    uci set wireless.$WIFI5_IFACE.device="$WIFI5_RADIO"
-    uci set wireless.$WIFI5_IFACE.mode='ap'
-    uci set wireless.$WIFI5_IFACE.ssid="$WIFI_5GHZ_SSID"
-    uci set wireless.$WIFI5_IFACE.encryption='psk2'
-    uci set wireless.$WIFI5_IFACE.key="$WIFI_5GHZ_KEY"
-    uci set wireless.$WIFI5_IFACE.network='ahwlan'
 fi
 
 echo "[5/7] Configuring bridge and BATMAN-adv..."
