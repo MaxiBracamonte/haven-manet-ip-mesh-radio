@@ -91,18 +91,6 @@ else
 fi
 
 echo "[3/7] Configuring 2.4GHz access point..."
-echo ""
-echo "  Most Haven gate builds use a Panda PAU0B USB 2.4GHz adapter."
-echo "  This plugs into a USB port on the Pi and shows up as a separate"
-echo "  radio. If you don't have one, the Pi's built-in Cypress radio"
-echo "  will be used instead (less reliable — drops in and out, but functional)."
-echo ""
-printf "  Do you have a Panda USB 2.4GHz adapter plugged in? [Y/n]: "
-read USE_PANDA
-USE_PANDA=$(echo "$USE_PANDA" | tr '[:upper:]' '[:lower:]')
-[ -z "$USE_PANDA" ] && USE_PANDA="y"
-echo ""
-
 USB_2G_RADIO=""
 ONBOARD_2G_RADIO=""
 for r in $(uci show wireless | grep "=wifi-device" | cut -d. -f2 | cut -d= -f1); do
@@ -115,22 +103,15 @@ for r in $(uci show wireless | grep "=wifi-device" | cut -d. -f2 | cut -d= -f1);
     esac
 done
 
-if [ "$USE_PANDA" = "y" ] || [ "$USE_PANDA" = "yes" ]; then
+if [ -n "$USB_2G_RADIO" ]; then
     WIFI2_RADIO="$USB_2G_RADIO"
-    if [ -z "$WIFI2_RADIO" ]; then
-        echo "  WARNING: No USB 2.4GHz adapter detected. Is the Panda plugged in?"
-        echo "  Falling back to onboard radio (if available)."
-        WIFI2_RADIO="$ONBOARD_2G_RADIO"
-    else
-        echo "  Using Panda USB adapter: $WIFI2_RADIO"
-    fi
-else
+    echo "  Detected Panda USB adapter: $WIFI2_RADIO"
+elif [ -n "$ONBOARD_2G_RADIO" ]; then
     WIFI2_RADIO="$ONBOARD_2G_RADIO"
-    if [ -z "$WIFI2_RADIO" ]; then
-        echo "  WARNING: No onboard 2.4GHz radio found, skipping."
-    else
-        echo "  Using onboard 2.4GHz radio: $WIFI2_RADIO"
-    fi
+    echo "  No USB adapter found — using onboard radio: $WIFI2_RADIO"
+    echo "  NOTE: onboard radio is less reliable (drops in and out). A Panda USB adapter is recommended."
+else
+    echo "  WARNING: No 2.4GHz radio found — skipping client AP."
 fi
 
 if [ -n "$WIFI2_RADIO" ]; then
@@ -262,4 +243,4 @@ echo "════════════════════════�
 echo ""
 echo "  Rebooting in 5 seconds..."
 sleep 5
-reboot
+reboot -f
