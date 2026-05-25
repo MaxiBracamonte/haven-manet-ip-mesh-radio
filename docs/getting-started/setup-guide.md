@@ -48,6 +48,8 @@ This is the node that shares internet with the rest of the mesh.
 1. On your phone, connect to the **`green`** WiFi (password: `greengreen`)
 2. Open a browser and confirm you have internet
 3. Run a speed test — this is your baseline; point nodes will be slower due to HaLow backhaul
+4. Check your phone's network settings — the gateway/router IP shown (e.g. `10.41.0.1`) is the gate's mesh IP; open `http://10.41.0.1` to reach LuCI from the mesh network
+5. You can also still reach LuCI from your upstream router's network using the gate's other IP (likely `192.168.x.x`) — useful for admin access without switching WiFi
 
 ## Step 2: Add Point Nodes (blue)
 
