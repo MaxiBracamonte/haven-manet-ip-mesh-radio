@@ -206,28 +206,8 @@ uci commit dhcp
 uci add_list firewall.@zone[0].network='ahwlan' 2>/dev/null || true
 uci commit firewall
 
-# shellcheck disable=SC2013
-echo "[6/6] Committing wireless, reconf, and br-ahwlan client AP port(s)…"
+echo "[6/6] Committing wireless..."
 uci commit wireless
-wifi reconf
-sleep 4
-# OpenMANET/Haven use an explicit ahwlan_dev.ports list (not only 'bat0'); client APs on
-# network=ahwlan must be listed or clients associate but get no 10.41 address (and never
-# 'join' a missing 'lan' — there is no separate lan on these images). Add any *-ap* ifaces.
-_P="$(uci -q get network.ahwlan_dev.ports 2>/dev/null)"
-for p in /sys/class/net/*-ap*; do
-    [ -e "$p" ] || continue
-    n="${p##*/}"
-    echo " $_P " | grep -q " $n " && continue
-    uci add_list "network.ahwlan_dev.ports"="$n"
-    _P="$_P $n"
-done
-uci commit network
-if [ -x /etc/init.d/network ]; then
-    /etc/init.d/network reload
-elif [ -x /sbin/wifi ]; then
-    /sbin/wifi
-fi
 
 echo ""
 echo "═══════════════════════════════════════════════════════════════════"
