@@ -85,7 +85,7 @@ After setup, connect your computer, phone, or tablet to the Haven network:
 
 1. **Join the node's WiFi** — `green-5ghz` for the gate; for a point, **`blue-2g`** from `setup-haven-point.sh` (2.4GHz USB only — the script does not set up the onboard 5GHz radio)
    - Gate WiFi password: `green-5ghz`
-   - Point: default SSID/PSK `blue-2g` / `blue-2g` (change in `WIFI_2G4_*` in the point script, or in LuCI)
+   - Point: default SSID/PSK `blue` / `blueblue` (change in `WIFI_2G4_*` in the point script, or in LuCI)
 2. **Verify your device got an IP** — you should receive an address in the `10.41.x.x` range
    - **Mac/Linux:** `ifconfig` or `ip addr` — look for `10.41.x.x` on your WiFi interface
    - **Windows:** `ipconfig` — look for `10.41.x.x` under your Wi-Fi adapter
@@ -184,7 +184,7 @@ All nodes use `root` as the username.
 |------|----------|-----------|---------------|
 | Gate (green) | `havengreen` | `green-5ghz` | `green-5ghz` |
 | Gate (green) 2.4GHz | — | `green` | `greengreen` |
-| Point (blue) | `havenblue` | `blue-2g` (2.4GHz; `setup-haven-point.sh`) | `blue-2g` |
+| Point (blue) | `havenblue` | `blue` (2.4GHz USB; `setup-haven-point.sh`) | `blueblue` |
 | Heltec | `heltec.org` | varies | varies |
 
 ---

@@ -32,8 +32,8 @@ HALOW_HTMODE="HT80"
 # 10.41.0.0/16, DHCP on the gate). This script does not configure onboard 5GHz; HaLow + USB 2.4G
 # is the supported combo for point nodes. Set ENABLE_2G4_AP=0 to skip the client AP.
 ENABLE_2G4_AP="1"
-WIFI_2G4_SSID="blue-2g"
-WIFI_2G4_KEY="blue-2g"
+WIFI_2G4_SSID="blue"
+WIFI_2G4_KEY="blueblue"
 WIFI_2G4_CHANNEL="1"
 
 #═══════════════════════════════════════════════════════════════════════════════
@@ -104,6 +104,10 @@ if [ "$ENABLE_2G4_AP" = 1 ] && [ -n "$WIFI_2G4_SSID" ]; then
     if [ -n "$USB_2G_RADIO" ]; then
         WIFI2_RADIO="$USB_2G_RADIO"
         echo "  Detected Panda USB adapter: $WIFI2_RADIO"
+        if [ -n "$ONBOARD_2G_RADIO" ]; then
+            uci set wireless.$ONBOARD_2G_RADIO.disabled='1'
+            echo "  Disabled onboard 2.4GHz radio: $ONBOARD_2G_RADIO"
+        fi
     elif [ -n "$ONBOARD_2G_RADIO" ]; then
         WIFI2_RADIO="$ONBOARD_2G_RADIO"
         echo "  No USB adapter found — using onboard radio: $WIFI2_RADIO"

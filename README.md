@@ -108,7 +108,7 @@ All Haven setup scripts assume each node is flashed with a fresh/recent version 
 |------|----------|-----------|---------------|
 | Gate (green) | `havengreen` | `green-5ghz` | `green-5ghz` |
 | Gate (green) 2.4GHz | — | `green` | `greengreen` |
-| Point (blue) | `havenblue` | `blue-2g` (2.4GHz USB; from `setup-haven-point.sh`) | `blue-2g` |
+| Point (blue) | `havenblue` | `blue` (2.4GHz USB; from `setup-haven-point.sh`) | `blueblue` |
 
 </details>
 
