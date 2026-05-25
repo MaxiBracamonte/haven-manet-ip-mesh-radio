@@ -27,6 +27,10 @@ HALOW_CHANNEL="28"        # US: 1-51, channel 28 = 916 MHz
 HALOW_HTMODE="HT80"       # HT20=2MHz, HT40=4MHz, HT80=8MHz
 
 # WiFi AP settings
+WIFI_2GHZ_SSID="green"
+WIFI_2GHZ_KEY="greengreen"
+WIFI_2GHZ_CHANNEL="6"
+
 WIFI_5GHZ_SSID="green-5ghz"
 WIFI_5GHZ_KEY="green-5ghz"
 WIFI_5GHZ_CHANNEL="36"
@@ -50,12 +54,12 @@ if [ ! -f /etc/openwrt_release ]; then
     exit 1
 fi
 
-echo "[1/6] Setting hostname and password..."
+echo "[1/7] Setting hostname and password..."
 uci set system.@system[0].hostname="$HOSTNAME"
 uci commit system
 (echo "$ROOT_PASSWORD"; echo "$ROOT_PASSWORD") | passwd root
 
-echo "[2/6] Configuring HaLow mesh radio (802.11ah)..."
+echo "[2/7] Configuring HaLow mesh radio (802.11ah)..."
 HALOW_RADIO=$(uci show wireless | grep "morse" | head -1 | cut -d. -f2)
 if [ -z "$HALOW_RADIO" ]; then
     echo "WARNING: No HaLow radio found, skipping"
@@ -86,7 +90,71 @@ else
     uci set network.batmesh.master='bat0'
 fi
 
-echo "[3/6] Configuring 5GHz access point..."
+echo "[3/7] Configuring 2.4GHz access point..."
+echo ""
+echo "  Most Haven gate builds use a Panda PAU0B USB 2.4GHz adapter."
+echo "  This plugs into a USB port on the Pi and shows up as a separate"
+echo "  radio. If you don't have one, the Pi's built-in Cypress radio"
+echo "  will be used instead (weaker range, but functional)."
+echo ""
+printf "  Do you have a Panda USB 2.4GHz adapter plugged in? [Y/n]: "
+read USE_PANDA
+USE_PANDA=$(echo "$USE_PANDA" | tr '[:upper:]' '[:lower:]')
+[ -z "$USE_PANDA" ] && USE_PANDA="y"
+echo ""
+
+USB_2G_RADIO=""
+ONBOARD_2G_RADIO=""
+for r in $(uci show wireless | grep "=wifi-device" | cut -d. -f2 | cut -d= -f1); do
+    band=$(uci get wireless.$r.band 2>/dev/null)
+    path=$(uci get wireless.$r.path 2>/dev/null)
+    [ "$band" != "2g" ] && continue
+    case "$path" in
+        *usb*) USB_2G_RADIO="$r" ;;
+        *)     ONBOARD_2G_RADIO="$r" ;;
+    esac
+done
+
+if [ "$USE_PANDA" = "y" ] || [ "$USE_PANDA" = "yes" ]; then
+    WIFI2_RADIO="$USB_2G_RADIO"
+    if [ -z "$WIFI2_RADIO" ]; then
+        echo "  WARNING: No USB 2.4GHz adapter detected. Is the Panda plugged in?"
+        echo "  Falling back to onboard radio (if available)."
+        WIFI2_RADIO="$ONBOARD_2G_RADIO"
+    else
+        echo "  Using Panda USB adapter: $WIFI2_RADIO"
+    fi
+else
+    WIFI2_RADIO="$ONBOARD_2G_RADIO"
+    if [ -z "$WIFI2_RADIO" ]; then
+        echo "  WARNING: No onboard 2.4GHz radio found, skipping."
+    else
+        echo "  Using onboard 2.4GHz radio: $WIFI2_RADIO"
+    fi
+fi
+
+if [ -n "$WIFI2_RADIO" ]; then
+    uci set wireless.$WIFI2_RADIO.disabled='0'
+    uci set wireless.$WIFI2_RADIO.channel="$WIFI_2GHZ_CHANNEL"
+    uci set wireless.$WIFI2_RADIO.htmode='HT20'
+    uci set wireless.$WIFI2_RADIO.country='US'
+
+    WIFI2_IFACE=$(uci show wireless | grep "wireless\..*\.device='$WIFI2_RADIO'" | grep -v mesh | head -1 | cut -d. -f2)
+    if [ -z "$WIFI2_IFACE" ]; then
+        WIFI2_IFACE="ap_2ghz"
+        uci set wireless.$WIFI2_IFACE=wifi-iface
+    fi
+
+    uci set wireless.$WIFI2_IFACE.device="$WIFI2_RADIO"
+    uci set wireless.$WIFI2_IFACE.mode='ap'
+    uci set wireless.$WIFI2_IFACE.ssid="$WIFI_2GHZ_SSID"
+    uci set wireless.$WIFI2_IFACE.encryption='sae'
+    uci set wireless.$WIFI2_IFACE.key="$WIFI_2GHZ_KEY"
+    uci set wireless.$WIFI2_IFACE.network='ahwlan'
+    echo "  2.4GHz AP configured: SSID=$WIFI_2GHZ_SSID"
+fi
+
+echo "[4/7] Configuring 5GHz access point..."
 WIFI5_RADIO=$(uci show wireless | grep "\.band='5g'" | head -1 | cut -d. -f2)
 if [ -z "$WIFI5_RADIO" ]; then
     echo "WARNING: No 5GHz radio found, skipping"
@@ -110,7 +178,7 @@ else
     uci set wireless.$WIFI5_IFACE.network='ahwlan'
 fi
 
-echo "[4/6] Configuring bridge and BATMAN-adv..."
+echo "[5/7] Configuring bridge and BATMAN-adv..."
 uci set network.ahwlan=interface
 uci set network.ahwlan.proto='static'
 uci set network.ahwlan.ipaddr="$MESH_IP"
@@ -154,7 +222,7 @@ uci delete network.ahwlan_dev.ports 2>/dev/null || true
 uci add_list network.ahwlan_dev.ports='bat0'
 uci commit network
 
-echo "[5/6] Configuring DHCP server..."
+echo "[6/7] Configuring DHCP server..."
 uci set dhcp.ahwlan=dhcp
 uci set dhcp.ahwlan.interface='ahwlan'
 uci set dhcp.ahwlan.ignore='0'
@@ -164,10 +232,13 @@ uci set dhcp.ahwlan.leasetime="$DHCP_LEASETIME"
 uci set dhcp.ahwlan.force='1'
 uci commit dhcp
 
-echo "[6/6] Configuring firewall and NAT..."
+echo "[7/7] Configuring firewall and NAT..."
+# ahwlan goes in the lan zone (zone[0]) alongside eth0, which already has
+# masq='1' — that's what NATs mesh traffic out to the upstream router.
+# zone[1] is wan but has no interface on this OpenMANET image, so don't touch it.
 uci add_list firewall.@zone[0].network='ahwlan' 2>/dev/null || true
-uci set firewall.@zone[1].masq='1'
-uci set firewall.@zone[1].mtu_fix='1'
+uci set firewall.@zone[0].masq='1'
+uci set firewall.@zone[0].mtu_fix='1'
 uci commit firewall
 
 uci commit wireless
@@ -179,6 +250,7 @@ echo "════════════════════════�
 echo ""
 echo "  Hostname:     $HOSTNAME"
 echo "  Mesh IP:      $MESH_IP"
+echo "  2.4GHz SSID:  $WIFI_2GHZ_SSID"
 echo "  5GHz SSID:    $WIFI_5GHZ_SSID"
 echo "  Mesh ID:      $MESH_ID"
 echo ""
