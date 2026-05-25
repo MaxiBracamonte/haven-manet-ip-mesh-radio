@@ -81,7 +81,7 @@ ssh -o ProxyCommand="ssh -W %h:%p root@<gate-ip>" root@<heltec-mesh-ip>  # passw
 # Gate — from your home LAN
 sshpass -p 'havengreen' ssh -T -o StrictHostKeyChecking=no root@<gate-ip> 'hostname; uci get network.ahwlan.ipaddr'
 
-# Point or any 10.41.x.x node — when YOUR laptop is already on the mesh (e.g. green-5ghz)
+# Point or any 10.41.x.x node — when YOUR laptop is already on the mesh (e.g. green)
 sshpass -p 'havenblue' ssh -T -o StrictHostKeyChecking=no root@<point-mesh-ip> 'batctl o'
 
 # Point from home LAN only: jump through gate (two passwords)

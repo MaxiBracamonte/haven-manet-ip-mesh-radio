@@ -88,7 +88,7 @@ Client access point for local devices.
 | Hardware | Cypress CYW43455 |
 | Frequency | 5.180 GHz (Channel 36) |
 | Mode | Access Point |
-| SSID | green-5ghz |
+| SSID | green-5ghz (disabled when Panda USB adapter is present) |
 | Encryption | WPA2 PSK |
 | Key | green-5ghz |
 | HT Mode | VHT80 |

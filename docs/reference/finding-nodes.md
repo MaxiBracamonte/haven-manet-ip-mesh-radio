@@ -18,8 +18,8 @@ After setup, you need to find each node's IP to access its web interface (LuCI) 
 
 What this means in practice:
 
-- Joined `green-5ghz`? You can reach `http://<blue-ip>`, `http://<heltec-ip>`, and any other node's LuCI.
-- Joined a point’s client AP (e.g. `blue-2g` from `setup-haven-point.sh`)? Same — reach green, heltec, or any point node.
+- Joined `green`? You can reach `http://<blue-ip>`, `http://<heltec-ip>`, and any other node's LuCI.
+- Joined a point’s client AP (e.g. `blue` from `setup-haven-point.sh`)? Same — reach green, heltec, or any point node.
 - SSH'd into any node? `ssh root@<any-other-node-ip>` works directly.
 - Phones on different nodes' WiFi APs can ping each other, Reticulum peers auto-discover, etc.
 
@@ -37,7 +37,7 @@ Caveats:
 1. **Connect your phone or laptop to `green` WiFi** (password: `greengreen`)
 2. **Find the gate's IP** — check your device's network settings; the gateway/router IP shown is the gate
 3. **Open a terminal on the gate** — pick one:
-   - **Browser:** go to `http://<gate-ip>` → **Services → Terminal**
+   - **Browser:** go to `http://<gate-ip>` → **Advanced Config → Services → Terminal**
    - **SSH:** `ssh root@<gate-ip>` from your computer
 4. **Find blue's IP** by running this on the gate:
    ```bash
@@ -68,7 +68,7 @@ ip neigh show dev br-ahwlan | grep 10.41   # live ARP table — real current IPs
 
 Cross-reference blue's MAC from `batctl n` against `ip neigh` to find its current IP, then try `http://<real-ip>` in the browser.
 
-Still failing? Check from your **laptop** (while on `green-5ghz`):
+Still failing? Check from your **laptop** (while on `green`):
 
 - Confirm you got a `10.41.x.x` address (not a `192.168.x.x` home-WiFi IP — easy to mix up)
 - Make sure `ping <blue-ip>` actually returns replies (see the callout in the Quick Answer above — always ping before you browse)
@@ -87,7 +87,7 @@ uci get network.ahwlan.ipaddr
 
 Two ways to get a terminal on the node:
 - **SSH from your computer:** `ssh root@<node-ip>` (use the node's password)
-- **LuCI web terminal:** browse to `http://<node-ip>`, then go to **Services → Terminal**. Log in as `root` with the node's password.
+- **LuCI web terminal:** browse to `http://<node-ip>`, then go to **Advanced Config → Services → Terminal**. Log in as `root` with the node's password.
 
 <img src="../../assets/luci-terminal-ip.png" alt="LuCI terminal showing uci get network.ahwlan.ipaddr" width="500">
 
@@ -121,7 +121,7 @@ The `strings` command only shows OpenMANET nodes (gate, point). Heltec/OpenWrt n
 
 ## Method 3: Connect to the node's WiFi
 
-Connect your computer to the node's WiFi AP (e.g. `green-5ghz`, `blue-2g` on points, `heltec-5`). If the mesh is working, DHCP will give your computer a `10.41.x.x` address. Check the **Router** field in your network settings — that's the node's IP. Browse to `http://<router-ip>`.
+Connect your computer to the node's WiFi AP (e.g. `green`, `blue` on points, `heltec-5`). If the mesh is working, DHCP will give your computer a `10.41.x.x` address. Check the **Router** field in your network settings — that's the node's IP. Browse to `http://<router-ip>`.
 
 ## Method 4: HDMI monitor + static IP (node not on the mesh)
 
@@ -152,7 +152,7 @@ If the node isn't on the mesh yet (no gate, first-time setup, or misconfigured),
 Works for **any node on the mesh** — point (blue), Heltec, or any other `10.41.x.x` node. From your laptop, the gate is usually the only node reachable directly over your LAN; every other node lives on the HaLow mesh and is reached by hopping through the gate.
 
 1. **Open a terminal on the gate** — pick one:
-   - **Browser:** go to `http://<gate-ip>` → **Services → Terminal**
+   - **Browser:** go to `http://<gate-ip>` → **Advanced Config → Services → Terminal**
    - **SSH:** `ssh root@<gate-ip>` from your computer
 2. Find the target node's mesh IP — `ip neigh show dev br-ahwlan` is the most reliable; or `strings /etc/openmanetd/openmanetd.db` for point nodes, `cat /tmp/dhcp.leases` for Heltec/other OpenWrt nodes.
 3. From the gate terminal, SSH to the target node:
@@ -181,7 +181,7 @@ This bypasses the mesh entirely — useful for initial setup or when the mesh is
 
 | Method | Steps |
 |--------|-------|
-| Gate WiFi | Connect to **green-5ghz** (password: `green-5ghz`), browse to **http://\<gate-mesh-ip\>** |
+| Gate WiFi | Connect to **green** (password: `green`), browse to **http://\<gate-mesh-ip\>** |
 | Upstream network | Connect to your upstream router's WiFi, find the gate's IP in your router's device list, browse to that IP |
 
 ### Point Node (blue)

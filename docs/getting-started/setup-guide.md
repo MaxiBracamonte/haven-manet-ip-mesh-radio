@@ -24,17 +24,17 @@ This is the node that shares internet with the rest of the mesh.
 4. **Initial setup screen** — set hostname and password, leave country as **US**, then click **Apply** and wait for the page to reload:
    - **Hostname:** `green`
    - **Password:** `havengreen`
-5. **After the page reloads** — go to **Wizards** → click **802.11s Mesh** → select **Mesh Gate** → select **Ethernet** as the upstream network. You can disable the 2.4GHz and 5GHz WiFi radios here — the Haven setup script reconfigures them anyway
-5. **Plug the gate into your upstream router** via Ethernet
-6. **Find the gate's new IP** in your router's device/DHCP table. If it doesn't appear, try powering the Pi off and on again — this forces it to request a new DHCP lease from the router
-7. **Open a terminal on the gate** (username: `root`, password: `havengreen`) — pick one:
-   - **Browser:** go to `http://<gate-ip>` → **Services → Terminal**
+5. **After the page reloads** — go to **Wizards** → click **802.11s Mesh** → select **Mesh Gate** → select **Ethernet** as the upstream network. On the mesh network screen, **leave the Mesh ID, passphrase, and channel settings as-is** — the Haven setup script overwrites them. You can disable the 2.4GHz and 5GHz WiFi radios here — the script reconfigures those too
+6. **Plug the gate into your upstream router** via Ethernet
+7. **Find the gate's new IP** in your router's device/DHCP table. If it doesn't appear, try powering the Pi off and on again — this forces it to request a new DHCP lease from the router
+8. **Open a terminal on the gate** (username: `root`, password: `havengreen`) — pick one:
+   - **Browser:** go to `http://<gate-ip>` → **Advanced Config → Services → Terminal**
    - **SSH:** `ssh root@<gate-ip>` from your computer
-8. **Run the Haven setup script** (the node now has internet via the router) — paste this and press **Enter**:
+9. **Run the Haven setup script** (the node now has internet via the router) — paste this and press **Enter**:
    ```bash
    wget -O /tmp/setup.sh "https://raw.githubusercontent.com/buildwithparallel/haven-manet-ip-mesh-radio/main/scripts/node-setup/setup-haven-gate.sh?$(date +%s)" && sh /tmp/setup.sh
    ```
-9. The node **reboots automatically** when the script finishes — wait ~60 seconds
+10. The node **reboots automatically** when the script finishes — wait ~60 seconds
 
 ### What your gate can do now
 
@@ -60,19 +60,19 @@ Point nodes extend the mesh — no internet connection needed on the point durin
 4. **Initial setup screen** — set hostname and password, leave country as **US**, then click **Apply** and wait for the page to reload:
    - **Hostname:** `blue`
    - **Password:** `havenblue`
-5. **After the page reloads** — go to **Wizards** → click **802.11s Mesh** → select **Mesh Point**. You can disable the 2.4GHz and 5GHz WiFi radios here — the Haven setup script reconfigures them anyway
-6. After the wizard finishes, **keep the Ethernet connected** and check your router or network settings for the point’s new IP address
-7. **Open LuCI at the new IP** (username: `root`, password: `havenblue`) → **Services → Terminal**
-8. In the terminal, run:
+5. **After the page reloads** — go to **Wizards** → click **802.11s Mesh** → select **Mesh Point** → select **Bridge** as the router type. On the mesh network screen, **leave the Mesh ID, passphrase, and channel settings as-is** — the Haven setup script overwrites them. You can disable the 2.4GHz and 5GHz WiFi radios here — the script reconfigures those too
+6. After the wizard finishes, the page will reload — the IP may stay the same (`10.41.254.1`), in which case just log back in. If it changed, find the new IP on your Mac: **System Settings → Network → USB/Ethernet adapter → Router** — that IP is the node. On Windows: **Settings → Network → Ethernet → View hardware and connection properties → Default gateway**
+7. **Open LuCI at the new IP** (username: `root`, password: `havenblue`) → **Advanced Config → Services → Terminal**
+8. In the terminal, type the following and press **Enter**:
    ```sh
    cat > /tmp/setup.sh
    ```
-9. On your laptop, open the [raw point setup script](https://raw.githubusercontent.com/buildwithparallel/haven-manet-ip-mesh-radio/main/scripts/node-setup/setup-haven-point.sh) in a browser, **select all → copy**, then paste it into the terminal
-10. Press **Ctrl+D** to finish, then run:
+9. On your laptop, open the [point setup script on GitHub](https://github.com/buildwithparallel/haven-manet-ip-mesh-radio/blob/main/scripts/node-setup/setup-haven-point.sh), click the **copy** button (top right of the code block), then paste into the terminal
+10. Press **Ctrl+D** to save, then run:
     ```sh
     sh /tmp/setup.sh
     ```
-11. The node **reboots automatically** when the script finishes — wait ~60 seconds
+11. The node **reboots automatically** when the script finishes — wait ~60 seconds. Once it's back up you can **unplug the Ethernet** — the point connects to the gate over HaLow from here on
 
 ### What your point can do now
 
@@ -87,6 +87,13 @@ Point nodes extend the mesh — no internet connection needed on the point durin
 2. Open a browser and confirm you have internet
 3. Bandwidth here is limited by the HaLow backhaul to the gate — expect lower speeds than on `green` directly, which is normal
 
+### Next Steps: Harden and Expand
+
+Once you've confirmed both nodes are up and internet is flowing through the mesh, do these before relying on it in the field:
+
+- **Change all passwords and SSIDs** — update `root` passwords and WiFi passphrases in LuCI (System → Administration, and Network → Wireless). The defaults exist for easy first-time setup, not security.
+- **Add more radios if needed** — additional WiFi adapters (USB or onboard) can be enabled and bridged into `ahwlan` via LuCI → Network → Wireless. The Panda USB + HaLow combination is the most reliable starting point, but the onboard Cypress 5GHz or additional USB adapters can be re-enabled once basic functionality is proven.
+
 ### Adding More Nodes
 
 For each additional point node:
@@ -97,7 +104,7 @@ For each additional point node:
 ### Verify the Mesh
 
 1. Connect your phone or laptop to **`green`** WiFi (password: `greengreen`)
-2. Check your network settings — the gateway IP shown is the gate; open a terminal there via **`http://<gate-ip>` → Services → Terminal** or SSH
+2. Check your network settings — the gateway IP shown is the gate; open a terminal there via **`http://<gate-ip>` → Advanced Config → Services → Terminal** or SSH
 3. Run on the gate to find blue's IP:
    ```bash
    ip neigh show dev br-ahwlan
@@ -127,9 +134,9 @@ batctl n              # BATMAN-adv neighbors
 
 After setup, connect your computer, phone, or tablet to the Haven network:
 
-1. **Join the node's WiFi** — `green` (2.4GHz) or `green-5ghz` for the gate; `blue` for a point (2.4GHz USB Panda only — onboard radios are disabled when Panda is present)
-   - Gate: `green` / `greengreen` or `green-5ghz` / `green-5ghz`
-   - Point: `blue` / `blueblue` (change in `WIFI_2G4_*` in the point script, or in LuCI)
+1. **Join the node's WiFi** — `green` for the gate, `blue` for a point
+   - Gate: `green` / `greengreen`
+   - Point: `blue` / `blueblue`
 2. **Verify your device got an IP** — you should receive an address in the `10.41.x.x` range
    - **Mac/Linux:** `ifconfig` or `ip addr` — look for `10.41.x.x` on your WiFi interface
    - **Windows:** `ipconfig` — look for `10.41.x.x` under your Wi-Fi adapter
@@ -226,9 +233,8 @@ All nodes use `root` as the username.
 
 | Node | Password | WiFi SSID | WiFi Password |
 |------|----------|-----------|---------------|
-| Gate (green) | `havengreen` | `green-5ghz` | `green-5ghz` |
-| Gate (green) 2.4GHz | — | `green` | `greengreen` |
-| Point (blue) | `havenblue` | `blue` (2.4GHz USB; `setup-haven-point.sh`) | `blueblue` |
+| Gate (green) | `havengreen` | `green` | `greengreen` |
+| Point (blue) | `havenblue` | `blue` | `blueblue` |
 | Heltec | `heltec.org` | varies | varies |
 
 ---

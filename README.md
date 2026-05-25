@@ -106,9 +106,8 @@ All Haven setup scripts assume each node is flashed with a fresh/recent version 
 
 | Node | Password | WiFi SSID | WiFi Password |
 |------|----------|-----------|---------------|
-| Gate (green) | `havengreen` | `green-5ghz` | `green-5ghz` |
-| Gate (green) 2.4GHz | — | `green` | `greengreen` |
-| Point (blue) | `havenblue` | `blue` (2.4GHz USB; from `setup-haven-point.sh`) | `blueblue` |
+| Gate (green) | `havengreen` | `green` | `greengreen` |
+| Point (blue) | `havenblue` | `blue` | `blueblue` |
 
 </details>
 

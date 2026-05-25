@@ -77,7 +77,7 @@ iwinfo wlan0 info
 | Property | Script default (change `WIFI_2G4_*`) |
 |----------|----------------------------------------|
 | Example iface | e.g. `phy1-ap0` (varies) |
-| SSID / PSK | `blue-2g` / `blue-2g` |
+| SSID / PSK | `blue` / `blueblue` |
 | Radio | 2.4GHz USB (e.g. RT5370) |
 
 **Onboard 5GHz (CYW43455):** not configured by `setup-haven-point.sh`. Add in LuCI only if you need it; many sites use USB 2.4GHz + HaLow and leave 5GHz off.
