@@ -34,10 +34,16 @@ Caveats:
 
 ## Quick Answer: "I'm on green's WiFi, how do I reach blue's LuCI?"
 
-1. SSH into the gate: `ssh root@<gate-ip>`
-2. Find blue's IP: `strings /etc/openmanetd/openmanetd.db`
-3. **Ping blue from your laptop first:** `ping <blue-ip>` — wait for replies, then hit Ctrl-C
-4. Open `http://<blue-ip>` in your browser (while still on green's WiFi)
+1. **Connect your phone or laptop to `green` WiFi** (password: `greengreen`)
+2. **Find the gate's IP** — check your device's network settings; the gateway/router IP shown is the gate
+3. **Open a terminal on the gate** — browse to `http://<gate-ip>` → Services → Terminal, or SSH in
+4. **Find blue's IP** by running this on the gate:
+   ```bash
+   ip neigh show dev br-ahwlan
+   ```
+   One of those IPs is blue — try each `10.41.x.x` address in your browser until LuCI loads
+5. **Ping blue from your laptop first:** `ping <blue-ip>` — wait for replies, then Ctrl-C
+6. Open `http://<blue-ip>` in your browser (while still on green's WiFi)
 
 This works because the gate bridges WiFi clients onto the same mesh subnet. Your laptop on green's WiFi can reach any `10.41.x.x` address directly.
 
@@ -178,8 +184,8 @@ This bypasses the mesh entirely — useful for initial setup or when the mesh is
 
 | Method | Steps |
 |--------|-------|
-| Point WiFi | Connect to **`blue-2g`** (PSK: `blue-2g` by default from the point script), browse to **http://\<point-mesh-ip\>** |
-| Gate WiFi (via mesh) | Connect to **green-5ghz**, browse to **http://\<point-mesh-ip\>** (find the IP using Method 2) |
+| Point WiFi | Connect to **`blue`** (password: `blueblue`), browse to **http://\<point-mesh-ip\>** |
+| Gate WiFi (via mesh) | Connect to **`green`**, find blue's IP by running `ip neigh show dev br-ahwlan` on the gate, browse to that IP |
 
 > **Tip:** If you can reach the point node's LuCI through the gate node's WiFi, your mesh is working.
 

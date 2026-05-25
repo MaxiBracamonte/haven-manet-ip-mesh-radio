@@ -32,24 +32,40 @@ This is the node that shares internet with the rest of the mesh.
    ```bash
    wget -O /tmp/setup.sh https://raw.githubusercontent.com/buildwithparallel/haven-manet-ip-mesh-radio/main/scripts/node-setup/setup-haven-gate.sh && sh /tmp/setup.sh
    ```
-9. The script will ask whether you have a **Panda USB 2.4GHz adapter** plugged in — answer `y` if you do (most builds), `n` to use the onboard radio instead
-10. The node **reboots automatically** when the script finishes — wait ~60 seconds
+9. The node **reboots automatically** when the script finishes — wait ~60 seconds
+
+### Gate Smoke Test
+
+1. On your phone, connect to the **`green`** WiFi (password: `greengreen`)
+2. Open a browser and confirm you have internet
+3. Run a speed test — this is your baseline; point nodes will be slower due to HaLow backhaul
 
 ## Step 2: Add Point Nodes (blue)
 
 Point nodes extend the mesh — no internet connection needed on the point during setup.
 
-> **Pro tip: copy-paste, don’t `wget` (unless the point really has internet).** Many point nodes have **no WAN / no DNS** while you are on the direct Ethernet or first-boot WiFi. **`wget` or `uclient-fetch` to GitHub will fail** on the node. On a **second device** (phone, laptop) that *does* have internet, open the [raw `setup-haven-point.sh`](https://raw.githubusercontent.com/buildwithparallel/haven-manet-ip-mesh-radio/main/scripts/node-setup/setup-haven-point.sh), copy the full script, and **paste** it into the point’s terminal. That works without any download on the node. If the point **does** have a working default route to the internet, `wget` is fine, but copy-paste is the reliable default.
+1. **Flash OpenMANET** onto a microSD card and insert it into the point node
+2. **Connect the point to your computer** via Ethernet and power it on
+3. **Open LuCI** — go to `http://10.41.254.1` in your browser
+4. **Run through the OpenMANET initial wizard** — select mesh point mode. You can disable the 2.4GHz and 5GHz WiFi radios in the wizard; the Haven setup script reconfigures them
+5. After the wizard finishes, **keep the Ethernet connected** and check your router or network settings for the point’s new IP address
+6. **Open LuCI at the new IP** → **Services → Terminal**
+7. In the terminal, run:
+   ```sh
+   cat > /tmp/setup.sh
+   ```
+8. On your laptop, open the [raw point setup script](https://raw.githubusercontent.com/buildwithparallel/haven-manet-ip-mesh-radio/main/scripts/node-setup/setup-haven-point.sh) in a browser, **select all → copy**, then paste it into the terminal
+9. Press **Ctrl+D** to finish, then run:
+   ```sh
+   sh /tmp/setup.sh
+   ```
+10. The node **reboots automatically** when the script finishes — wait ~60 seconds
 
-1. Plug Ethernet **directly from your computer to the point node** (or use the method in [Finding & Accessing Nodes](../reference/finding-nodes.md) if you already have another way in)
-2. Open a browser and go to `http://10.41.254.1` (or the address your image uses for first contact)
-3. Go to **Services → Terminal** (or SSH if you have it)
-4. **Paste the script** (recommended):
-   - On a device **with** internet, open the [raw setup script](https://raw.githubusercontent.com/buildwithparallel/haven-manet-ip-mesh-radio/main/scripts/node-setup/setup-haven-point.sh) in a browser
-   - Select all → copy
-   - Paste into the point node’s terminal and run it (if a long paste fails, save first: `cat > /tmp/s.sh` → paste → **Ctrl+D**, then `sh /tmp/s.sh`)
-5. After the script finishes, type `reboot` and press Enter
-6. Wait ~60 seconds for reboot
+### Point Smoke Test
+
+1. On your phone, connect to the **`blue`** WiFi (password: `blueblue`)
+2. Open a browser and confirm you have internet
+3. Bandwidth here is limited by the HaLow backhaul to the gate — expect lower speeds than on `green` directly, which is normal
 
 ### Adding More Nodes
 
