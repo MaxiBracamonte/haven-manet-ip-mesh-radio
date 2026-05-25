@@ -21,11 +21,10 @@ This is the node that shares internet with the rest of the mesh.
 1. **Flash OpenMANET** onto a microSD card and insert it into the gate node
 2. **Connect the gate to your computer** via Ethernet and power it on
 3. **Open LuCI** — go to `http://10.41.254.1` (or the IP shown on the node's boot screen) in your browser. Log in with username `root` and **no password** (leave it blank)
-4. **Run through the OpenMANET initial wizard** — the first screen asks for HaLow country (leave as **US**), hostname, and password. Use these Haven defaults or choose your own (they can be changed later in LuCI):
+4. **Initial setup screen** — set hostname and password, leave country as **US**, then click **Apply** and wait for the page to reload:
    - **Hostname:** `green`
    - **Password:** `havengreen`
-
-   Select **mesh gate** mode and **Ethernet** as the upstream network. You can **disable the 2.4GHz and 5GHz WiFi radios** in the wizard — the Haven setup script reconfigures them from scratch anyway
+5. **After the page reloads** — go to **Wizards** → click **802.11s Mesh** → select **Mesh Gate** → select **Ethernet** as the upstream network. You can disable the 2.4GHz and 5GHz WiFi radios here — the Haven setup script reconfigures them anyway
 5. **Plug the gate into your upstream router** via Ethernet
 6. **Find the gate's new IP** in your router's device/DHCP table. If it doesn't appear, try powering the Pi off and on again — this forces it to request a new DHCP lease from the router
 7. **Open a terminal on the gate** (username: `root`, password: `havengreen`) — pick one:
@@ -43,7 +42,7 @@ This is the node that shares internet with the rest of the mesh.
 - **Broadcasts `green` WiFi** (2.4GHz) — any phone, laptop, or tablet can connect and get internet just like a normal router. Clients get an IP in the `10.41.0.0/16` subnet (e.g. `10.41.0.100`) — this is the Haven mesh address space shared across all nodes and clients
 - **Scans for HaLow mesh nodes** — if a point node is in range, BATMAN-adv automatically bridges it into the network so its clients share the same internet and can talk to each other
 
-### Gate Smoke Test
+### Gate Check
 
 1. On your phone, connect to the **`green`** WiFi (password: `greengreen`)
 2. Open a browser and confirm you have internet
@@ -58,23 +57,22 @@ Point nodes extend the mesh — no internet connection needed on the point durin
 1. **Flash OpenMANET** onto a microSD card and insert it into the point node
 2. **Connect the point to your computer** via Ethernet and power it on
 3. **Open LuCI** — go to `http://10.41.254.1` in your browser. Log in with username `root` and **no password** (leave it blank)
-4. **Run through the OpenMANET initial wizard** — the first screen asks for HaLow country (leave as **US**), hostname, and password. Use these Haven defaults or choose your own (they can be changed later in LuCI):
+4. **Initial setup screen** — set hostname and password, leave country as **US**, then click **Apply** and wait for the page to reload:
    - **Hostname:** `blue`
    - **Password:** `havenblue`
-
-   Select mesh point mode. You can disable the 2.4GHz and 5GHz WiFi radios in the wizard; the Haven setup script reconfigures them
-5. After the wizard finishes, **keep the Ethernet connected** and check your router or network settings for the point’s new IP address
-6. **Open LuCI at the new IP** → **Services → Terminal**
-7. In the terminal, run:
+5. **After the page reloads** — go to **Wizards** → click **802.11s Mesh** → select **Mesh Point**. You can disable the 2.4GHz and 5GHz WiFi radios here — the Haven setup script reconfigures them anyway
+6. After the wizard finishes, **keep the Ethernet connected** and check your router or network settings for the point’s new IP address
+7. **Open LuCI at the new IP** (username: `root`, password: `havenblue`) → **Services → Terminal**
+8. In the terminal, run:
    ```sh
    cat > /tmp/setup.sh
    ```
-8. On your laptop, open the [raw point setup script](https://raw.githubusercontent.com/buildwithparallel/haven-manet-ip-mesh-radio/main/scripts/node-setup/setup-haven-point.sh) in a browser, **select all → copy**, then paste it into the terminal
-9. Press **Ctrl+D** to finish, then run:
-   ```sh
-   sh /tmp/setup.sh
-   ```
-10. The node **reboots automatically** when the script finishes — wait ~60 seconds
+9. On your laptop, open the [raw point setup script](https://raw.githubusercontent.com/buildwithparallel/haven-manet-ip-mesh-radio/main/scripts/node-setup/setup-haven-point.sh) in a browser, **select all → copy**, then paste it into the terminal
+10. Press **Ctrl+D** to finish, then run:
+    ```sh
+    sh /tmp/setup.sh
+    ```
+11. The node **reboots automatically** when the script finishes — wait ~60 seconds
 
 ### What your point can do now
 
@@ -83,7 +81,7 @@ Point nodes extend the mesh — no internet connection needed on the point durin
 - **Self-heals** — if another point node is in range, BATMAN-adv will route around failures automatically
 - **No Ethernet needed** — the HaLow link is the only backhaul required
 
-### Point Smoke Test
+### Point Check
 
 1. On your phone, connect to the **`blue`** WiFi (password: `blueblue`)
 2. Open a browser and confirm you have internet
