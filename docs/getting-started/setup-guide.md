@@ -20,11 +20,15 @@ This is the node that shares internet with the rest of the mesh.
 
 1. **Flash OpenMANET** onto a microSD card and insert it into the gate node
 2. **Connect the gate to your computer** via Ethernet and power it on
-3. **Open LuCI** — go to `http://10.41.254.1` (or the IP shown on the node's boot screen) in your browser
-4. **Run through the OpenMANET initial wizard** — this configures the basic mesh gate settings (hostname, mesh channel, password, etc.). You can **disable the 2.4GHz and 5GHz WiFi radios** in the wizard — the Haven setup script reconfigures them from scratch anyway
+3. **Open LuCI** — go to `http://10.41.254.1` (or the IP shown on the node's boot screen) in your browser. Log in with username `root` and **no password** (leave it blank)
+4. **Run through the OpenMANET initial wizard** — the first screen asks for HaLow country (leave as **US**), hostname, and password. Use these Haven defaults or choose your own (they can be changed later in LuCI):
+   - **Hostname:** `green`
+   - **Password:** `havengreen`
+
+   Select **mesh gate** mode and **Ethernet** as the upstream network. You can **disable the 2.4GHz and 5GHz WiFi radios** in the wizard — the Haven setup script reconfigures them from scratch anyway
 5. **Plug the gate into your upstream router** via Ethernet
-6. **Find the gate's new IP** in your router's device/DHCP table
-7. **Open a terminal on the gate** — pick one:
+6. **Find the gate's new IP** in your router's device/DHCP table. If it doesn't appear, try powering the Pi off and on again — this forces it to request a new DHCP lease from the router
+7. **Open a terminal on the gate** (username: `root`, password: `havengreen`) — pick one:
    - **Browser:** go to `http://<gate-ip>` → **Services → Terminal**
    - **SSH:** `ssh root@<gate-ip>` from your computer
 8. **Run the Haven setup script** (the node now has internet via the router):
@@ -45,8 +49,12 @@ Point nodes extend the mesh — no internet connection needed on the point durin
 
 1. **Flash OpenMANET** onto a microSD card and insert it into the point node
 2. **Connect the point to your computer** via Ethernet and power it on
-3. **Open LuCI** — go to `http://10.41.254.1` in your browser
-4. **Run through the OpenMANET initial wizard** — select mesh point mode. You can disable the 2.4GHz and 5GHz WiFi radios in the wizard; the Haven setup script reconfigures them
+3. **Open LuCI** — go to `http://10.41.254.1` in your browser. Log in with username `root` and **no password** (leave it blank)
+4. **Run through the OpenMANET initial wizard** — the first screen asks for HaLow country (leave as **US**), hostname, and password. Use these Haven defaults or choose your own (they can be changed later in LuCI):
+   - **Hostname:** `blue`
+   - **Password:** `havenblue`
+
+   Select mesh point mode. You can disable the 2.4GHz and 5GHz WiFi radios in the wizard; the Haven setup script reconfigures them
 5. After the wizard finishes, **keep the Ethernet connected** and check your router or network settings for the point’s new IP address
 6. **Open LuCI at the new IP** → **Services → Terminal**
 7. In the terminal, run:

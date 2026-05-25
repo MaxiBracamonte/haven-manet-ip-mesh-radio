@@ -106,6 +106,14 @@ done
 if [ -n "$USB_2G_RADIO" ]; then
     WIFI2_RADIO="$USB_2G_RADIO"
     echo "  Detected Panda USB adapter: $WIFI2_RADIO"
+    for r in $(uci show wireless | grep "=wifi-device" | cut -d. -f2 | cut -d= -f1); do
+        path=$(uci get wireless.$r.path 2>/dev/null)
+        type=$(uci get wireless.$r.type 2>/dev/null)
+        [ "$type" = "morse" ] && continue
+        case "$path" in *usb*) continue ;; esac
+        uci set wireless.$r.disabled='1'
+        echo "  Disabled onboard radio: $r"
+    done
 elif [ -n "$ONBOARD_2G_RADIO" ]; then
     WIFI2_RADIO="$ONBOARD_2G_RADIO"
     echo "  No USB adapter found — using onboard radio: $WIFI2_RADIO"
@@ -120,18 +128,17 @@ if [ -n "$WIFI2_RADIO" ]; then
     uci set wireless.$WIFI2_RADIO.htmode='HT20'
     uci set wireless.$WIFI2_RADIO.country='US'
 
-    WIFI2_IFACE=$(uci show wireless | grep "wireless\..*\.device='$WIFI2_RADIO'" | grep -v mesh | head -1 | cut -d. -f2)
-    if [ -z "$WIFI2_IFACE" ]; then
-        WIFI2_IFACE="ap_2ghz"
-        uci set wireless.$WIFI2_IFACE=wifi-iface
-    fi
-
-    uci set wireless.$WIFI2_IFACE.device="$WIFI2_RADIO"
-    uci set wireless.$WIFI2_IFACE.mode='ap'
-    uci set wireless.$WIFI2_IFACE.ssid="$WIFI_2GHZ_SSID"
-    uci set wireless.$WIFI2_IFACE.encryption='sae'
-    uci set wireless.$WIFI2_IFACE.key="$WIFI_2GHZ_KEY"
-    uci set wireless.$WIFI2_IFACE.network='ahwlan'
+    # Delete all existing AP ifaces on this radio and create a clean one
+    for iface in $(uci show wireless | grep "wireless\..*\.device='$WIFI2_RADIO'" | grep -v mesh | cut -d. -f2); do
+        uci delete wireless.$iface 2>/dev/null || true
+    done
+    uci set wireless.ap_2ghz=wifi-iface
+    uci set wireless.ap_2ghz.device="$WIFI2_RADIO"
+    uci set wireless.ap_2ghz.mode='ap'
+    uci set wireless.ap_2ghz.ssid="$WIFI_2GHZ_SSID"
+    uci set wireless.ap_2ghz.encryption='sae'
+    uci set wireless.ap_2ghz.key="$WIFI_2GHZ_KEY"
+    uci set wireless.ap_2ghz.network='ahwlan'
     echo "  2.4GHz AP configured: SSID=$WIFI_2GHZ_SSID"
 fi
 
