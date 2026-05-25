@@ -33,7 +33,7 @@ This is the node that shares internet with the rest of the mesh.
    - **SSH:** `ssh root@<gate-ip>` from your computer
 8. **Run the Haven setup script** (the node now has internet via the router) — paste this and press **Enter**:
    ```bash
-   wget -O /tmp/setup.sh https://raw.githubusercontent.com/buildwithparallel/haven-manet-ip-mesh-radio/main/scripts/node-setup/setup-haven-gate.sh && sh /tmp/setup.sh
+   wget -O /tmp/setup.sh "https://raw.githubusercontent.com/buildwithparallel/haven-manet-ip-mesh-radio/main/scripts/node-setup/setup-haven-gate.sh?$(date +%s)" && sh /tmp/setup.sh
    ```
 9. The node **reboots automatically** when the script finishes — wait ~60 seconds
 
