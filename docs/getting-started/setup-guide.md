@@ -37,6 +37,12 @@ This is the node that shares internet with the rest of the mesh.
    ```
 9. The node **reboots automatically** when the script finishes — wait ~60 seconds
 
+### What your gate can do now
+
+- **Gets internet** from any upstream router via Ethernet — home ISP, Starlink, hotel, whatever has a port
+- **Broadcasts `green` WiFi** (2.4GHz) — any phone, laptop, or tablet can connect and get internet just like a normal router
+- **Scans for HaLow mesh nodes** — if a point node is in range, BATMAN-adv automatically bridges it into the network so its clients share the same internet and can talk to each other
+
 ### Gate Smoke Test
 
 1. On your phone, connect to the **`green`** WiFi (password: `greengreen`)
@@ -67,6 +73,13 @@ Point nodes extend the mesh — no internet connection needed on the point durin
    sh /tmp/setup.sh
    ```
 10. The node **reboots automatically** when the script finishes — wait ~60 seconds
+
+### What your point can do now
+
+- **Connects to the gate** over HaLow (sub-1GHz) — up to several kilometers line of sight, through walls and terrain
+- **Broadcasts `blue` WiFi** (2.4GHz) — clients connect and get internet routed back through the gate via BATMAN-adv
+- **Self-heals** — if another point node is in range, BATMAN-adv will route around failures automatically
+- **No Ethernet needed** — the HaLow link is the only backhaul required
 
 ### Point Smoke Test
 

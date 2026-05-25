@@ -243,7 +243,11 @@ echo ""
 echo "  Hostname:     $HOSTNAME"
 echo "  Mesh IP:      $MESH_IP"
 echo "  2.4GHz SSID:  $WIFI_2GHZ_SSID"
-echo "  5GHz SSID:    $WIFI_5GHZ_SSID"
+if [ -n "$USB_2G_RADIO" ]; then
+    echo "  5GHz:         disabled (Panda USB active — re-enable in LuCI if needed)"
+else
+    echo "  5GHz SSID:    $WIFI_5GHZ_SSID"
+fi
 echo "  Mesh ID:      $MESH_ID"
 echo ""
 echo "  Optional next steps after reboot:"
