@@ -86,17 +86,56 @@ else
     uci set network.batmesh.master='bat0'
 fi
 
-echo "[3/6] Configuring 2.4GHz client access point (USB/RT5370-friendly)…"
+echo "[3/6] Configuring 2.4GHz client access point..."
 WIFI2_RADIO=
 if [ "$ENABLE_2G4_AP" = 1 ] && [ -n "$WIFI_2G4_SSID" ]; then
-    WIFI2_RADIO=$(uci show wireless 2>/dev/null | grep "\.band='2g'" | head -1 | cut -d. -f2)
-    if [ -z "$WIFI2_RADIO" ]; then
-        echo "  WARNING: ENABLE_2G4_AP=1 but no 2.4GHz radio in UCI — skip (plug USB WiFi, rescan, or set ENABLE_2G4_AP=0)"
+    echo ""
+    echo "  Most Haven point builds use a Panda PAU0B USB 2.4GHz adapter."
+    echo "  This plugs into a USB port on the Pi and shows up as a separate"
+    echo "  radio. If you don't have one, the Pi's built-in radio will be used"
+    echo "  instead (less reliable — drops in and out, but functional)."
+    echo ""
+    printf "  Do you have a Panda USB 2.4GHz adapter plugged in? [Y/n]: "
+    read USE_PANDA
+    USE_PANDA=$(echo "$USE_PANDA" | tr '[:upper:]' '[:lower:]')
+    [ -z "$USE_PANDA" ] && USE_PANDA="y"
+    echo ""
+
+    USB_2G_RADIO=""
+    ONBOARD_2G_RADIO=""
+    for r in $(uci show wireless | grep "=wifi-device" | cut -d. -f2 | cut -d= -f1); do
+        band=$(uci get wireless.$r.band 2>/dev/null)
+        path=$(uci get wireless.$r.path 2>/dev/null)
+        [ "$band" != "2g" ] && continue
+        case "$path" in
+            *usb*) USB_2G_RADIO="$r" ;;
+            *)     ONBOARD_2G_RADIO="$r" ;;
+        esac
+    done
+
+    if [ "$USE_PANDA" = "y" ] || [ "$USE_PANDA" = "yes" ]; then
+        WIFI2_RADIO="$USB_2G_RADIO"
+        if [ -z "$WIFI2_RADIO" ]; then
+            echo "  WARNING: No USB 2.4GHz adapter detected. Is the Panda plugged in?"
+            echo "  Falling back to onboard radio (if available)."
+            WIFI2_RADIO="$ONBOARD_2G_RADIO"
+        else
+            echo "  Using Panda USB adapter: $WIFI2_RADIO"
+        fi
     else
-        echo "  Found 2.4GHz radio: $WIFI2_RADIO"
+        WIFI2_RADIO="$ONBOARD_2G_RADIO"
+        if [ -z "$WIFI2_RADIO" ]; then
+            echo "  WARNING: No onboard 2.4GHz radio found, skipping."
+        else
+            echo "  Using onboard 2.4GHz radio: $WIFI2_RADIO"
+        fi
+    fi
+
+    if [ -n "$WIFI2_RADIO" ]; then
         uci set "wireless.$WIFI2_RADIO.disabled"="0"
         uci set "wireless.$WIFI2_RADIO.channel"="$WIFI_2G4_CHANNEL"
         uci set "wireless.$WIFI2_RADIO.htmode"="HT20"
+        uci set "wireless.$WIFI2_RADIO.country"="US"
 
         WIFI2_IFACE=$(uci show wireless | grep "wireless\..*\.device='$WIFI2_RADIO'" | head -1 | cut -d. -f2)
         if [ -z "$WIFI2_IFACE" ]; then
@@ -112,6 +151,7 @@ if [ "$ENABLE_2G4_AP" = 1 ] && [ -n "$WIFI_2G4_SSID" ]; then
         uci set "wireless.$WIFI2_IFACE.encryption"="psk2"
         uci set "wireless.$WIFI2_IFACE.key"="$WIFI_2G4_KEY"
         uci set "wireless.$WIFI2_IFACE.network"="ahwlan"
+        echo "  2.4GHz AP configured: SSID=$WIFI_2G4_SSID"
     fi
 else
     echo "  (2.4GHz client AP disabled — set ENABLE_2G4_AP=1 and SSID/key to enable)"
@@ -200,10 +240,12 @@ echo "  Gateway:      $GATEWAY_IP"
 [ "$ENABLE_2G4_AP" = 1 ] && [ -n "$WIFI_2G4_SSID" ] && echo "  2.4GHz SSID:  $WIFI_2G4_SSID  (USB; br-ahwlan in step 6)"
 echo "  Mesh ID:      $MESH_ID"
 echo ""
-echo "  Reboot now:   reboot"
-echo ""
 echo "  Optional next steps after reboot:"
 echo "    - Install Reticulum:  sh setup-reticulum.sh"
 echo "    - Install ATAK bridge: sh setup-cot-bridge.sh"
 echo ""
 echo "═══════════════════════════════════════════════════════════════════"
+echo ""
+echo "  Rebooting in 5 seconds..."
+sleep 5
+reboot

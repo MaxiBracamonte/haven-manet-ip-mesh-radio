@@ -95,7 +95,7 @@ echo ""
 echo "  Most Haven gate builds use a Panda PAU0B USB 2.4GHz adapter."
 echo "  This plugs into a USB port on the Pi and shows up as a separate"
 echo "  radio. If you don't have one, the Pi's built-in Cypress radio"
-echo "  will be used instead (weaker range, but functional)."
+echo "  will be used instead (less reliable — drops in and out, but functional)."
 echo ""
 printf "  Do you have a Panda USB 2.4GHz adapter plugged in? [Y/n]: "
 read USE_PANDA

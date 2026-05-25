@@ -89,7 +89,7 @@ All Haven setup scripts assume each node is flashed with a fresh/recent version 
 
 | Step | What | How |
 |------|------|-----|
-| **1** | Set up the Gate node | Plug into router, run setup script → [Setup Guide](docs/getting-started/setup-guide.md#step-1-set-up-the-gate-node-green) |
+| **1** | Set up the Gate node | Flash OpenMANET → run OpenMANET wizard → plug into router → SSH in → run setup script → [Setup Guide](docs/getting-started/setup-guide.md#step-1-set-up-the-gate-node-green) |
 | **2** | Add Point nodes | Plug into laptop, paste setup script → [Setup Guide](docs/getting-started/setup-guide.md#step-2-add-point-nodes-blue) |
 | **3** | Reticulum *(optional)* | Apps on your phone/laptop (Sideband, MeshChat) on Haven WiFi → [Reticulum](integrations/reticulum/README.md) |
 | **4** | ATAK Bridge *(optional)* | Situational awareness → [ATAK](integrations/atak/README.md) |

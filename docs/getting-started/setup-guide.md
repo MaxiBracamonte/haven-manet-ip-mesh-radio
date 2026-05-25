@@ -18,17 +18,22 @@ Step-by-step instructions for setting up a Haven mesh network.
 
 This is the node that shares internet with the rest of the mesh.
 
-1. Plug the gate node into your **upstream router via Ethernet**
-2. Find the gate's IP address in your **router's device list**
-3. Open a terminal on the gate — pick one:
-   - **SSH:** `ssh root@<gate-ip>` from your computer
-   - **Browser:** go to `http://<gate-ip>` → **Services → Terminal**
-4. Run the setup script:
-```bash
-wget -O setup.sh https://raw.githubusercontent.com/buildwithparallel/haven-manet-ip-mesh-radio/main/scripts/node-setup/setup-haven-gate.sh
-sh setup.sh && reboot
-```
-5. Wait ~60 seconds for reboot
+1. **Flash OpenMANET** onto a microSD card and insert it into the gate node
+2. **Connect the gate to your computer** via Ethernet and power it on
+3. **Open LuCI** — go to `http://10.41.254.1` (or the IP shown on the node's boot screen) in your browser
+4. **Run through the OpenMANET initial wizard** — this configures the basic mesh gate settings (hostname, mesh channel, password, etc.). You can **disable the 2.4GHz and 5GHz WiFi radios** in the wizard — the Haven setup script reconfigures them from scratch anyway
+5. **Plug the gate into your upstream router** via Ethernet
+6. **Find the gate's new IP** in your router's device/DHCP table
+7. **SSH into the gate** from your computer:
+   ```bash
+   ssh root@<gate-ip>
+   ```
+8. **Run the Haven setup script** (the node now has internet via the router):
+   ```bash
+   wget -O /tmp/setup.sh https://raw.githubusercontent.com/buildwithparallel/haven-manet-ip-mesh-radio/main/scripts/node-setup/setup-haven-gate.sh && sh /tmp/setup.sh
+   ```
+9. The script will ask whether you have a **Panda USB 2.4GHz adapter** plugged in — answer `y` if you do (most builds), `n` to use the onboard radio instead
+10. The node **reboots automatically** when the script finishes — wait ~60 seconds
 
 ## Step 2: Add Point Nodes (blue)
 
