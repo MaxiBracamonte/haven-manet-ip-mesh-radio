@@ -53,30 +53,7 @@ This works because the gate bridges WiFi clients onto the same mesh subnet. Your
 
 > **Pro tip: LuCI stuck on a never-ending spinner.** If the page opens but sits forever on a loading animation, open a terminal, run `ping <node-ip>`, let a few replies through, then refresh the browser — the UI will often come up right after. Same kind of nudge as pinging *before* you browse, but for when the connection already started in a half-ready state.
 
-### If `http://<blue-ip>` doesn't load
 
-The `openmanetd.db` entry can be stale (an IP from a previous boot) or blue may not be fully on the mesh. Work through these in order:
-
-```bash
-# On the gate — verify blue is actually at that IP right now
-ping -c 3 <blue-ip>
-
-# No reply? Find blue's current IP a different way:
-batctl n                             # HaLow neighbors (MAC addresses)
-ip neigh show dev br-ahwlan | grep 10.41   # live ARP table — real current IPs
-```
-
-Cross-reference blue's MAC from `batctl n` against `ip neigh` to find its current IP, then try `http://<real-ip>` in the browser.
-
-Still failing? Check from your **laptop** (while on `green`):
-
-- Confirm you got a `10.41.x.x` address (not a `192.168.x.x` home-WiFi IP — easy to mix up)
-- Make sure `ping <blue-ip>` actually returns replies (see the callout in the Quick Answer above — always ping before you browse)
-- Make sure you're using `http://`, not `https://` — LuCI is HTTP only
-
-If ping fails from the gate itself, the problem is the mesh — run the diagnostic script on blue (see [Troubleshooting](../runbooks/troubleshooting.md)).
-
----
 
 ## Method 1: Run a command on the node
 
