@@ -159,6 +159,8 @@ echo "d9bd729dfc56bcacbe4b007238bf0291" > /root/.cot_peer
 /etc/init.d/cot_bridge restart
 ```
 
+> **Warning:** Do not use **Quick Config** on this node. It regenerates the wireless config and silently resets the HaLow mesh interface from `network='batmesh'` to `network='ahwlan'`, bypassing BATMAN-adv entirely. The node will drop off the mesh. Use **Network → Wireless** in LuCI or UCI commands for any config changes.
+
 ## Management
 
 ### SSH Access

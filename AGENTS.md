@@ -28,6 +28,15 @@ You are helping a user manage a Haven mesh network. This section gives you the c
 
 Haven is a HaLow (802.11ah) mesh network using BATMAN-adv for Layer 2 routing on OpenWrt/OpenMANET. Nodes bridge everything through `br-ahwlan` on the `10.41.x.x/16` subnet. One node (the "gate") has internet via `eth0` and runs DHCP for the whole mesh.
 
+### Node names and roles
+
+| Name | Role | Hostname | Password |
+|------|------|----------|----------|
+| **green** | Gate — internet uplink, DHCP server for the whole mesh | green | havengreen |
+| **blue** | Point — mesh extender, gets internet through green | blue | havenblue |
+
+When a user says "green" they mean the gate node. When they say "blue" they mean the point node. These are the standard Haven node names.
+
 ### Network architecture
 
 ```
@@ -109,7 +118,7 @@ uci get network.ahwlan.ipaddr
 
 **Symptom:** `batctl if` is empty, `ip link show wlan0` says `master br-ahwlan` instead of `master bat0`
 
-**Cause:** Mesh interface has `network='ahwlan'` instead of the batmesh hardif
+**Cause:** Mesh interface has `network='ahwlan'` instead of the batmesh hardif. The most common trigger is running **Quick Config** in LuCI — it regenerates the wireless config and silently resets this value. Never use Quick Config on Haven nodes; use Network → Wireless or UCI directly.
 
 **Diagnose:**
 ```bash

@@ -4,6 +4,8 @@ This guide gives you a mental model of how the mesh works, then a checklist for 
 
 See also: [Finding & Accessing Nodes](../reference/finding-nodes.md) if you just need to find a node's IP.
 
+> **Warning:** Do not use **Quick Config** on green or blue. It regenerates the wireless config and silently resets the HaLow mesh interface from `network='batmesh0'` to `network='ahwlan'`, bypassing BATMAN-adv entirely. Green will lose all mesh peers and blue becomes unreachable. Use **Network → Wireless** in LuCI or UCI commands instead.
+
 ---
 
 ## The Mental Model

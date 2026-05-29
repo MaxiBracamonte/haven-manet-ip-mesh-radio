@@ -179,6 +179,8 @@ provide it to each Point node during their CoT bridge setup.
 
 See [ATAK README](../../integrations/atak/README.md) for details.
 
+> **Warning:** Do not use **Quick Config** on this node. It regenerates the wireless config and silently resets the HaLow mesh interface from `network='batmesh0'` to `network='ahwlan'`, bypassing BATMAN-adv entirely. All mesh peers will disappear. Use **Network → Wireless** in LuCI or UCI commands for any config changes.
+
 ## Management
 
 ### SSH Access
