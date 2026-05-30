@@ -6,6 +6,8 @@ ADSBCOT is available for OpenMANET via `opkg`, but it is not installed by defaul
 
 For deeper details, refer to the [official ADSBCOT documentation](https://adsbcot.readthedocs.io/).
 
+![RTL-SDR dongle connected to a compact ADS-B antenna](../../assets/rtl-sdr-adsb-dongle.png)
+
 ## Features
 
 - Converts ADS-B messages to CoT format for TAK clients
@@ -35,6 +37,8 @@ opkg install python3-cryptography
 ### 2. Connect the SDR
 
 Plug an RTL-SDR dongle into your Raspberry Pi (USB 3 preferred).
+
+![Field ADS-B receiver setup with antenna, RTL-SDR, and Haven node](../../assets/rtl-sdr-adsb-field-setup.png)
 
 ### 3. Enable and Start Services
 
