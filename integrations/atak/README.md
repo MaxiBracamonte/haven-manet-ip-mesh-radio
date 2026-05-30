@@ -271,7 +271,7 @@ echo "<new_hash>" > /root/.cot_peer
 
 ## See Also
 
-![Field ADS-B receiver setup with antenna, RTL-SDR, and Haven node](../../assets/rtl-sdr-adsb-field-setup.png)
+![Aircraft markers displayed in ATAK from ADS-B to CoT](../../assets/atak-adsb-aircraft-markers.png)
 
 - **[ADS-B to CoT](adsb-to-cot.md)** — Display aircraft in TAK using an RTL-SDR receiver and ADSBCOT
 

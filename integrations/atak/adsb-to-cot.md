@@ -38,6 +38,8 @@ opkg install python3-cryptography
 
 Plug an RTL-SDR dongle into your Raspberry Pi (USB 3 preferred).
 
+A dedicated ADS-B antenna is not required for basic reception. A 915 MHz antenna works fine for this setup, especially when you have a clear view of the sky.
+
 ![Field ADS-B receiver setup with antenna, RTL-SDR, and Haven node](../../assets/rtl-sdr-adsb-field-setup.png)
 
 ### 3. Enable and Start Services
@@ -70,9 +72,14 @@ logread -e adsbcot | tail -n 40
 
 Open ATAK, WinTAK, or iTAK and verify aircraft CoT markers are appearing on the map.
 
+![Aircraft markers displayed in ATAK from ADS-B to CoT](../../assets/atak-adsb-aircraft-markers.png)
+
+![Aircraft visible overhead while testing ADS-B reception](../../assets/adsb-aircraft-overhead.png)
+
 ## Requirements
 
 - RTL-SDR dongle (USB 3 recommended)
+- 915 MHz antenna or dedicated ADS-B antenna
 - OpenMANET node (Raspberry Pi gate or point)
 - TAK client (ATAK, WinTAK, iTAK, or TAKX) connected to the Haven node's WiFi
 
