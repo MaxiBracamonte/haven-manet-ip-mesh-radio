@@ -13,9 +13,9 @@ Haven is a mesh networking platform that combines:
 - **BATMAN-adv** for automatic Layer 2 mesh routing
 - **OpenMANET** firmware (OpenWrt-based) for reliable embedded networking
 - **USB sidecar support** for LoRa radios, RTL-SDR, and other peripherals
+- **Optional ADS-B to CoT** for aircraft tracking in TAK
 - **Optional Reticulum** for encrypted overlay communications
 - **Optional ATAK/CivTAK** integration for situational awareness
-- **Optional ADS-B to CoT** for aircraft tracking in TAK
 
 ### Why Haven?
 
@@ -90,9 +90,9 @@ All Haven setup scripts assume each node is flashed with a fresh/recent version 
 |------|------|-----|
 | **1** | Set up the Gate node | Flash OpenMANET → run OpenMANET wizard → plug into router → SSH in → run setup script → [Setup Guide](docs/getting-started/setup-guide.md#step-1-set-up-the-gate-node-green) |
 | **2** | Add Point nodes | Plug into laptop, paste setup script → [Setup Guide](docs/getting-started/setup-guide.md#step-2-add-point-nodes-blue) |
-| **3** | Reticulum *(optional)* | Apps on your phone/laptop (Sideband, MeshChat) on Haven WiFi → [Reticulum](integrations/reticulum/README.md) |
-| **4** | ATAK Bridge *(optional)* | Situational awareness → [ATAK](integrations/atak/README.md) |
-| **5** | ADS-B to CoT *(optional)* | Aircraft tracking in TAK via RTL-SDR → [ADS-B](integrations/atak/adsb-to-cot.md) |
+| **3** | ADS-B to CoT *(optional)* | Aircraft tracking in TAK via RTL-SDR → [ADS-B](integrations/atak/adsb-to-cot.md) |
+| **4** | Reticulum *(optional)* | Apps on your phone/laptop (Sideband, MeshChat) on Haven WiFi → [Reticulum](integrations/reticulum/README.md) |
+| **5** | ATAK Bridge *(optional)* | Situational awareness → [ATAK](integrations/atak/README.md) |
 | **6** | LoRa sidecar *(optional)* | USB LoRa MCU for Reticulum → [Tested devices](docs/reference/tested-usb-devices.md) |
 
 > After any step, use LuCI's web interface to change passwords, WiFi SSIDs, and other settings. See **[Finding & Accessing Nodes](docs/reference/finding-nodes.md)** to reach each node.
