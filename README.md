@@ -90,7 +90,7 @@ All Haven setup scripts assume each node is flashed with a fresh/recent version 
 |------|------|-----|
 | **1** | Set up the Gate node | Flash OpenMANET → run OpenMANET wizard → plug into router → SSH in → run setup script → [Setup Guide](docs/getting-started/setup-guide.md#step-1-set-up-the-gate-node-green) |
 | **2** | Add Point nodes | Plug into laptop, paste setup script → [Setup Guide](docs/getting-started/setup-guide.md#step-2-add-point-nodes-blue) |
-| **3** | ADS-B to CoT *(optional)* | Aircraft tracking in TAK via RTL-SDR → [ADS-B](integrations/atak/adsb-to-cot.md) |
+| **3** | ADS-B to CoT *(optional)* | Aircraft tracking in TAK via RTL-SDR → [ADS-B](integrations/adsb/README.md) |
 | **4** | Reticulum *(optional)* | Apps on your phone/laptop (Sideband, MeshChat) on Haven WiFi → [Reticulum](integrations/reticulum/README.md) |
 | **5** | ATAK Bridge *(optional)* | Situational awareness → [ATAK](integrations/atak/README.md) |
 | **6** | LoRa sidecar *(optional)* | USB LoRa MCU for Reticulum → [Tested devices](docs/reference/tested-usb-devices.md) |
@@ -126,7 +126,7 @@ All Haven setup scripts assume each node is flashed with a fresh/recent version 
 | **[Range Optimization](docs/advanced/range-optimization.md)** | Antenna selection, TX power, channel width tuning |
 | **[Reticulum](integrations/reticulum/README.md)** | Encrypted overlay communications |
 | **[ATAK Bridge](integrations/atak/README.md)** | ATAK/CivTAK situational awareness over Reticulum |
-| **[ADS-B to CoT](integrations/atak/adsb-to-cot.md)** | Aircraft tracking in TAK via RTL-SDR |
+| **[ADS-B to CoT](integrations/adsb/README.md)** | Aircraft tracking in TAK via RTL-SDR |
 | **[Scripts](scripts/README.md)** | Script reference and Reticulum demo tools |
 | **[AI Agents](AGENTS.md)** | Context for AI agents (Claude, Cursor, etc.) to diagnose and fix your mesh |
 

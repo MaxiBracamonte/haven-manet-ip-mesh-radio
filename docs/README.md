@@ -29,7 +29,7 @@ flowchart LR
 | **Tune range, antennas, RF** | [Advanced](advanced/) — [range](advanced/range-optimization.md), [antenna smart routing](advanced/antenna-smart-routing.md) |
 | **Reticulum (optional overlay)** | [integrations/reticulum/](../integrations/reticulum/README.md) |
 | **ATAK / CoT (optional)** | [integrations/atak/](../integrations/atak/README.md) |
-| **ADS-B to CoT (optional)** | [integrations/atak/adsb-to-cot.md](../integrations/atak/adsb-to-cot.md) |
+| **ADS-B to CoT (optional)** | [integrations/adsb/](../integrations/adsb/README.md) |
 
 Firmware (OpenMANET) is not built in this repo — see [openmanet.org](https://openmanet.org/) and the [OpenMANET/firmware](https://github.com/OpenMANET/firmware) project.
 

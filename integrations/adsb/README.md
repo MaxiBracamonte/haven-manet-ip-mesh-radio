@@ -6,6 +6,8 @@ ADSBCOT is available for OpenMANET via `opkg`, but it is not installed by defaul
 
 For deeper details, refer to the [official ADSBCOT documentation](https://adsbcot.readthedocs.io/).
 
+**Demo:** [ADS-B to CoT on Haven — YouTube](https://www.youtube.com/watch?v=ugHFq4Bsd8o)
+
 ![RTL-SDR dongle connected to a compact ADS-B antenna](../../assets/rtl-sdr-adsb-dongle.png)
 
 ## Features
@@ -76,10 +78,17 @@ Open ATAK, WinTAK, or iTAK and verify aircraft CoT markers are appearing on the 
 
 ![Aircraft visible overhead while testing ADS-B reception](../../assets/adsb-aircraft-overhead.png)
 
+## What to Expect
+
+- **No internet required.** ADS-B is passive RF reception — the Haven node picks up aircraft transponder signals directly over the air and multicasts the CoT data to TAK clients on its WiFi. No uplink needed.
+- **Standard antennas work fine.** No dedicated ADS-B antenna is required for basic testing — the HaLow or LoRa antenna already on the node is enough to pick up traffic with a clear view of the sky. A 1090 MHz-tuned ADS-B antenna will improve range and sensitivity, but is far from necessary to get started.
+- **Range.** In open conditions expect roughly 50–100 miles of aircraft coverage. Results vary by antenna height, obstructions, and aircraft altitude.
+- **What you'll see in ATAK.** Each aircraft appears as a marker on the map. Tap it to see track, course, speed, altitude, and aircraft metadata pulled from the ADS-B transponder.
+
 ## Requirements
 
 - RTL-SDR dongle (USB 3 recommended)
-- 915 MHz antenna or dedicated ADS-B antenna
+- Antenna — any 915 MHz, HaLow, or LoRa antenna works for basic testing; a 1090 MHz-tuned ADS-B antenna improves range
 - OpenMANET node (Raspberry Pi gate or point)
 - TAK client (ATAK, WinTAK, iTAK, or TAKX) connected to the Haven node's WiFi
 
