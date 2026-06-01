@@ -40,7 +40,7 @@ opkg install python3-cryptography
 
 Plug an RTL-SDR dongle into your Raspberry Pi (USB 3 preferred).
 
-A dedicated ADS-B antenna is not required for basic reception. A 915 MHz antenna works fine for this setup, especially when you have a clear view of the sky.
+A dedicated ADS-B antenna is not required for basic reception. A 915 MHz antenna works fine for this setup, especially when you have a clear view of the sky. In the demo video, the antenna used is the [Yogurt Cup Antenna from Heads Down Comms Up](https://fivefourcommunications.com/product/yca-lorawan-868-915mhz/) — a compact sub-gigahertz antenna.
 
 ![Field ADS-B receiver setup with antenna, RTL-SDR, and Haven node](../../assets/rtl-sdr-adsb-field-setup.png)
 
@@ -81,7 +81,7 @@ Open ATAK, WinTAK, or iTAK and verify aircraft CoT markers are appearing on the 
 ## What to Expect
 
 - **No internet required.** ADS-B is passive RF reception — the Haven node picks up aircraft transponder signals directly over the air and multicasts the CoT data to TAK clients on its WiFi. No uplink needed.
-- **Standard antennas work fine.** No dedicated ADS-B antenna is required for basic testing — the HaLow or LoRa antenna already on the node is enough to pick up traffic with a clear view of the sky. A 1090 MHz-tuned ADS-B antenna will improve range and sensitivity, but is far from necessary to get started.
+- **Standard antennas work fine.** No dedicated ADS-B antenna is required for basic testing — the HaLow or LoRa antenna already on the node is enough to pick up traffic with a clear view of the sky. The demo video uses the [Yogurt Cup Antenna from Heads Down Comms Up](https://fivefourcommunications.com/product/yca-lorawan-868-915mhz/) (sub-gigahertz). A 1090 MHz-tuned ADS-B antenna will improve range and sensitivity, but is far from necessary to get started.
 - **Range.** In open conditions expect roughly 50–100 miles of aircraft coverage. Results vary by antenna height, obstructions, and aircraft altitude.
 - **What you'll see in ATAK.** Each aircraft appears as a marker on the map. Tap it to see track, course, speed, altitude, and aircraft metadata pulled from the ADS-B transponder.
 
