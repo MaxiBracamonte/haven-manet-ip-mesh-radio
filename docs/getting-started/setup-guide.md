@@ -14,7 +14,7 @@ Step-by-step instructions for setting up a Haven mesh network.
 >
 > **Card not wiping cleanly or re-flash looks half-done?** In Raspberry Pi Imager, use the **Erase** option first (in **Choose OS** it is often under **Raspberry Pi OS (other)** or a **Misc** / **utility** section, depending on version; some builds label it as formatting the card). That fully blanks the microSD, then run **Choose OS** → your firmware file / image and **Write** as usual.
 >
-> **Pro tip (Raspberry Pi 4):** If **Erase** then OpenMANET still misbehaves, some installs respond to writing **Raspberry Pi OS (vanilla)** to the card first, then using Imager again to **write the OpenMANET image on top** (overwriting the Pi install). The intermediate full Pi OS image can force a clean partition layout on stubborn cards. Booting Pi OS once in between is optional; either way, finish with OpenMANET as the last write.
+> **Pro tip (Raspberry Pi 4):** If **Erase** still leaves the card in a bad state, first flash **Raspberry Pi Zero (32-bit)** to the card. That usually clears stubborn cards properly. Then use Imager again to flash your desired final image.
 >
 > **Upgrading an existing install:** Open LuCI → System → Backup / Flash Firmware → upload the correct image for that node. **Uncheck "Keep settings"** for a clean slate.
 
