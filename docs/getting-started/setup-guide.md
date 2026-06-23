@@ -4,21 +4,25 @@ Step-by-step instructions for setting up a Haven mesh network.
 
 **[Haven Guide](https://buildwithparallel.com/products/haven)** - Video tutorials, schematics, 3D printable enclosures, Discord community, and direct support.
 
-> **Prerequisite:** All scripts assume each node is flashed with a fresh/recent version of [OpenMANET](https://openmanet.org/).
+> **Prerequisite:** All scripts assume each node is flashed with fresh firmware for its hardware.
 >
-> **Fresh install:** Flash OpenMANET onto each node's microSD card using Raspberry Pi Imager, then insert the card and power on.
+> **Haven 1 / Raspberry Pi 4 or CM4:** Flash a current [OpenMANET](https://openmanet.org/) image.
 >
-> **Card not wiping cleanly or re-flash looks half-done?** In Raspberry Pi Imager, use the **Erase** option first (in **Choose OS** it is often under **Raspberry Pi OS (other)** or a **Misc** / **utility** section, depending on version; some builds label it as formatting the card). That fully blanks the microSD, then run **Choose OS** → your OpenMANET file / image and **Write** as usual.
+> **Haven 2 / Raspberry Pi 5:** Flash the Pi 5-specific OpenWrt/Morse firmware, not the Haven 1 / Pi 4 OpenMANET image. Build it from [`buildwithparallel/openwrt-morse-rpi5`](https://github.com/buildwithparallel/openwrt-morse-rpi5), or download the prebuilt [v0.3.0-alpha release](https://github.com/buildwithparallel/openwrt-morse-rpi5/releases/tag/v0.3.0-alpha).
+>
+> **Fresh install:** Flash the correct image onto each node's microSD card using Raspberry Pi Imager, then insert the card and power on.
+>
+> **Card not wiping cleanly or re-flash looks half-done?** In Raspberry Pi Imager, use the **Erase** option first (in **Choose OS** it is often under **Raspberry Pi OS (other)** or a **Misc** / **utility** section, depending on version; some builds label it as formatting the card). That fully blanks the microSD, then run **Choose OS** → your firmware file / image and **Write** as usual.
 >
 > **Pro tip (Raspberry Pi 4):** If **Erase** then OpenMANET still misbehaves, some installs respond to writing **Raspberry Pi OS (vanilla)** to the card first, then using Imager again to **write the OpenMANET image on top** (overwriting the Pi install). The intermediate full Pi OS image can force a clean partition layout on stubborn cards. Booting Pi OS once in between is optional; either way, finish with OpenMANET as the last write.
 >
-> **Upgrading an existing install:** Open LuCI → System → Backup / Flash Firmware → upload the OpenMANET image. **Uncheck "Keep settings"** for a clean slate.
+> **Upgrading an existing install:** Open LuCI → System → Backup / Flash Firmware → upload the correct image for that node. **Uncheck "Keep settings"** for a clean slate.
 
 ## Step 1: Set Up the Gate Node (green)
 
 This is the node that shares internet with the rest of the mesh.
 
-1. **Flash OpenMANET** onto a microSD card and insert it into the gate node
+1. **Flash the correct platform firmware** onto a microSD card and insert it into the gate node
 2. **Connect the gate to your computer** via Ethernet and power it on
 3. **Open LuCI** — go to `http://10.41.254.1` (or the IP shown on the node's boot screen) in your browser. Log in with username `root` and **no password** (leave it blank)
 4. **Initial setup screen** — set hostname and password, leave country as **US**, then click **Apply** and wait for the page to reload:
@@ -54,7 +58,7 @@ This is the node that shares internet with the rest of the mesh.
 
 Point nodes extend the mesh — no internet connection needed on the point during setup.
 
-1. **Flash OpenMANET** onto a microSD card and insert it into the point node
+1. **Flash the correct platform firmware** onto a microSD card and insert it into the point node
 2. **Connect the point to your computer** via Ethernet and power it on
 3. **Open LuCI** — go to `http://10.41.254.1` in your browser. Log in with username `root` and **no password** (leave it blank)
 4. **Initial setup screen** — set hostname and password, leave country as **US**, then click **Apply** and wait for the page to reload:

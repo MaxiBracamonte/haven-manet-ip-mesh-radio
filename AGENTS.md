@@ -28,6 +28,8 @@ You are helping a user manage a Haven mesh network. This section gives you the c
 
 Haven is a HaLow (802.11ah) mesh network using BATMAN-adv for Layer 2 routing on OpenWrt/OpenMANET. Nodes bridge everything through `br-ahwlan` on the `10.41.x.x/16` subnet. One node (the "gate") has internet via `eth0` and runs DHCP for the whole mesh.
 
+**Firmware/platform note:** Haven 1 (Raspberry Pi 4 / CM4) uses OpenMANET images. Haven 2 (Raspberry Pi 5) requires a different Pi 5-specific OpenWrt/Morse firmware image built from [`buildwithparallel/openwrt-morse-rpi5`](https://github.com/buildwithparallel/openwrt-morse-rpi5), or downloaded from the prebuilt [v0.3.0-alpha release](https://github.com/buildwithparallel/openwrt-morse-rpi5/releases/tag/v0.3.0-alpha). Do not tell users to flash the Haven 1 / Pi 4 OpenMANET image onto a Haven 2 / Pi 5 node.
+
 ### Node names and roles
 
 | Name | Role | Hostname | Password |

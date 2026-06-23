@@ -2,6 +2,17 @@
 
 Haven 2 runs on the Raspberry Pi 5 with USB-attached peripherals.
 
+## Firmware
+
+Haven 2 requires a Raspberry Pi 5-specific OpenWrt/Morse firmware image. Do **not** use the Haven 1 / Raspberry Pi 4 OpenMANET image on Pi 5 hardware.
+
+Use one of these options:
+
+- **Download:** prebuilt [v0.3.0-alpha release](https://github.com/buildwithparallel/openwrt-morse-rpi5/releases/tag/v0.3.0-alpha)
+- **Build from source:** [`buildwithparallel/openwrt-morse-rpi5`](https://github.com/buildwithparallel/openwrt-morse-rpi5)
+
+The Haven setup scripts in this repo run after the Pi 5 firmware is flashed and booted.
+
 ## Hardware
 
 - **SBC**: Raspberry Pi 5 (4GB or 8GB)
@@ -50,4 +61,4 @@ See [Pi 4 notes](pi4-notes.md#halow-hat-spi-failures) — same issue applies if 
 
 ## OpenWrt Build
 
-See [openwrt-build-packages.md](openwrt-build-packages.md) for the recommended package list for Pi 5 builds.
+See [openwrt-build-packages.md](openwrt-build-packages.md) for the recommended package list if you are building the Pi 5 firmware yourself.

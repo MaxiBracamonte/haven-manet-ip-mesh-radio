@@ -97,9 +97,10 @@ US HaLow channels are in the 902-928 MHz band, shared with ISM devices (LoRa, sm
 
 | Component | Version | Description |
 |-----------|---------|-------------|
-| **OpenMANET** | 24.10 (1.6.1) | OpenWrt-based mesh firmware |
-| **OpenWrt** | 24.10 | Base embedded Linux distribution |
-| **Linux Kernel** | 6.6.102 | Operating system kernel |
+| **Haven 1 Firmware** | OpenMANET 24.10 (1.6.1) | Pi 4 / CM4 OpenWrt-based mesh firmware |
+| **Haven 2 Firmware** | [v0.3.0-alpha](https://github.com/buildwithparallel/openwrt-morse-rpi5/releases/tag/v0.3.0-alpha) or source build | Pi 5-specific OpenWrt/Morse firmware from [`buildwithparallel/openwrt-morse-rpi5`](https://github.com/buildwithparallel/openwrt-morse-rpi5) |
+| **OpenWrt** | 24.10 on Haven 1; 23.05.5 base with Pi 5 backports on Haven 2 | Base embedded Linux distribution |
+| **Linux Kernel** | 6.6.x | Operating system kernel |
 | **Morse Micro Driver** | 1.16.4 | HaLow radio driver |
 | **BATMAN-adv** | 2025.4 | Layer 2 mesh routing protocol |
 | **Python** | 3.11.14 | Runtime for Reticulum |

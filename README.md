@@ -3,7 +3,7 @@
 Build decentralized, long-range mesh networks with **Haven** — a complete open-source solution for creating self-healing IP networks that share internet access across kilometers without any central infrastructure.
 
 > [!TIP]
-> **Get on the air:** flash [OpenMANET](https://openmanet.org/), then the **[setup guide](docs/getting-started/setup-guide.md)**. **Find a node:** **[Finding & accessing nodes](docs/reference/finding-nodes.md)**. **Print a case** (100% free): **[Enclosures](#enclosures)** or [Haven case on Printables](https://www.printables.com/model/1468595-haven-case-for-raspberry-pi-based-manet-by-paralle). **Build help & community:** [Haven Guide](https://buildwithparallel.com/products/haven) (videos, schematics, Discord, support).
+> **Get on the air:** flash the correct firmware for your platform, then the **[setup guide](docs/getting-started/setup-guide.md)**. **Haven 1 / Pi 4:** use [OpenMANET](https://openmanet.org/). **Haven 2 / Pi 5:** use the [Pi 5 OpenWrt/Morse firmware](https://github.com/buildwithparallel/openwrt-morse-rpi5). **Find a node:** **[Finding & accessing nodes](docs/reference/finding-nodes.md)**. **Print a case** (100% free): **[Enclosures](#enclosures)** or [Haven case on Printables](https://www.printables.com/model/1468595-haven-case-for-raspberry-pi-based-manet-by-paralle). **Build help & community:** [Haven Guide](https://buildwithparallel.com/products/haven) (videos, schematics, Discord, support).
 
 ## What is Haven?
 
@@ -11,7 +11,7 @@ Haven is a mesh networking platform that combines:
 
 - **HaLow radios** (802.11ah) operating in sub-1GHz spectrum for multi-kilometer range
 - **BATMAN-adv** for automatic Layer 2 mesh routing
-- **OpenMANET** firmware (OpenWrt-based) for reliable embedded networking
+- **OpenWrt-based firmware** for reliable embedded networking: OpenMANET on Haven 1 / Pi 4, and the Pi 5 OpenWrt/Morse image on Haven 2
 - **USB sidecar support** for LoRa radios, RTL-SDR, and other peripherals
 - **Optional ADS-B to CoT** for aircraft tracking in TAK
 - **Optional Reticulum** for encrypted overlay communications
@@ -51,6 +51,7 @@ USB-attached HaLow radio with a flexible USB peripheral bus. Still being validat
 - **HaLow Radio**: Morse Micro MM8108 (USB)
 - **2.4GHz WiFi**: RT5370 USB adapter (Panda Wireless or similar)
 - **USB Hub**: Recommended for additional peripherals
+- **Firmware**: Requires the Pi 5-specific OpenWrt/Morse image, not the Haven 1 / Pi 4 OpenMANET image. Build it from [`buildwithparallel/openwrt-morse-rpi5`](https://github.com/buildwithparallel/openwrt-morse-rpi5), or download the prebuilt [v0.3.0-alpha release](https://github.com/buildwithparallel/openwrt-morse-rpi5/releases/tag/v0.3.0-alpha).
 - **Platform details**: [Pi 5 notes](docs/reference/pi5-notes.md)
 
 ## Haven Nodes
@@ -84,11 +85,13 @@ flowchart TB
 
 ## Quick Start
 
-All Haven setup scripts assume each node is flashed with a fresh/recent version of [OpenMANET](https://openmanet.org/). Flash the image onto a microSD card using Raspberry Pi Imager, insert it into the node, and power on. If the card still looks like it has old data after flashing, use Raspberry Pi Imager's **Erase** (or SD **format/erase** utility) on the card first, then write the image.
+All Haven setup scripts assume each node is flashed with fresh firmware for its hardware. **Haven 1 / Raspberry Pi 4 or CM4** nodes use [OpenMANET](https://openmanet.org/). **Haven 2 / Raspberry Pi 5** nodes require the Pi 5-specific OpenWrt/Morse firmware built from [`buildwithparallel/openwrt-morse-rpi5`](https://github.com/buildwithparallel/openwrt-morse-rpi5), or downloaded from the [v0.3.0-alpha release](https://github.com/buildwithparallel/openwrt-morse-rpi5/releases/tag/v0.3.0-alpha). Do not flash the Haven 1 / Pi 4 OpenMANET image onto a Haven 2 / Pi 5 node.
+
+Flash the image onto a microSD card using Raspberry Pi Imager, insert it into the node, and power on. If the card still looks like it has old data after flashing, use Raspberry Pi Imager's **Erase** (or SD **format/erase** utility) on the card first, then write the image.
 
 | Step | What | How |
 |------|------|-----|
-| **1** | Set up the Gate node | Flash OpenMANET → run OpenMANET wizard → plug into router → SSH in → run setup script → [Setup Guide](docs/getting-started/setup-guide.md#step-1-set-up-the-gate-node-green) |
+| **1** | Set up the Gate node | Flash platform firmware → run first-boot / mesh wizard → plug into router → SSH in → run setup script → [Setup Guide](docs/getting-started/setup-guide.md#step-1-set-up-the-gate-node-green) |
 | **2** | Add Point nodes | Plug into laptop, paste setup script → [Setup Guide](docs/getting-started/setup-guide.md#step-2-add-point-nodes-blue) |
 | **3** | ADS-B to CoT *(optional)* | Aircraft tracking in TAK via RTL-SDR → [ADS-B](integrations/adsb/README.md) |
 | **4** | Reticulum *(optional)* | Apps on your phone/laptop (Sideband, MeshChat) on Haven WiFi → [Reticulum](integrations/reticulum/README.md) |

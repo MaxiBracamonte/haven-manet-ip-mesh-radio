@@ -1,6 +1,8 @@
-# OpenWrt Build — Recommended Packages for Haven Nodes
+# OpenWrt Build — Recommended Packages for Haven 2 / Pi 5
 
 Target: `bcm27xx/bcm2712` (Raspberry Pi 5), OpenWrt 23.05.x, aarch64_cortex-a76
+
+This page is for building the Haven 2 / Raspberry Pi 5 OpenWrt/Morse firmware yourself from [`buildwithparallel/openwrt-morse-rpi5`](https://github.com/buildwithparallel/openwrt-morse-rpi5). If you just want to flash a prebuilt image, use the [v0.3.0-alpha release](https://github.com/buildwithparallel/openwrt-morse-rpi5/releases/tag/v0.3.0-alpha).
 
 ## ADS-B to CoT
 
